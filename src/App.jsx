@@ -12,6 +12,24 @@ import './App.css'
     const aboutOpacity = useTransform(aboutProgress, [0, 0.5, 1], [0, 1, 0])
     const aboutY = useTransform(aboutProgress, [0, 0.5, 1], [100, 0, -100])
 
+    const projectsRef = useRef(null)
+    const { scrollYProgress: projectsProgress } = useScroll({
+      target: projectsRef,
+      offset: ["start end", "end start"]
+    })
+
+    const projectsOpacity = useTransform(projectsProgress, [0, 0.5, 1], [0, 1, 0])
+    const projectsY = useTransform(projectsProgress, [0, 0.5, 1], [100, 0, -100])
+
+    const contactRef = useRef(null)
+    const { scrollYProgress: contactProgress } = useScroll({
+      target: contactRef,
+      offset: ["start end", "end start"]
+    })
+
+    const contactOpacity = useTransform(contactProgress, [0, 0.5, 1], [0, 1, 0])
+    const contactY = useTransform(contactProgress, [0, 0.5, 1], [100, 0, -100])
+
     return (
       <div className="app">
         <section id ="hero">
@@ -34,16 +52,16 @@ import './App.css'
               </p>
           </motion.div>
         </section>
-        <section id ="projects">
+        <section id ="projects" ref={projectsRef}>
           <motion.div style=
-          {{ opacity: aboutOpacity, y: aboutY }}>
+          {{ opacity: projectsOpacity, y: projectsY }}>
             <h2>Projects</h2>
             <p>Here are some of the projects I've worked on:</p>
           </motion.div>
         </section>
-        <section id ="contact">
+        <section id ="contact" ref={contactRef}>
           <motion.div style=
-          {{ opacity: aboutOpacity, y: aboutY }}>
+          {{ opacity: contactOpacity, y: contactY }}>
             <h2>Contact</h2>
             <p>Feel free to reach out to me!</p>
           </motion.div>
