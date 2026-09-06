@@ -57,6 +57,28 @@ import './App.css'
           {{ opacity: projectsOpacity, y: projectsY }}>
             <h2>Projects</h2>
             <p>Here are some of the projects I've worked on:</p>
+            <div className="projects-grid">
+              <div className="project-card">
+                <h3>Homework Tracker</h3>
+                <p>A class-facing web application for shared homework entries, built with Firebase and Cloudinary</p>
+                <a href="https://github.com/PacsCore/homework-tracker" target="_blank">View on GitHub →
+                </a>
+              </div>
+
+              <div className="project-card">
+                <h3>Daily Idea Mailer</h3>
+                <p>A simple email client for sending daily coding idea updates, built with Javascript, Gemini and dev.to</p>
+                <a href="https://github.com/PacsCore/daily-idea-mailer" target="_blank">View on GitHub →
+                </a>
+              </div>
+
+              <div className="project-card">
+                <h3>Quick PDF Converter</h3>
+                <p>A simple tool for converting documents to PDF format, built with React and Node.js</p>
+                <a href="https://github.com/PacsCore/QuickFileConverter" target="_blank">View on GitHub →
+                </a>
+              </div>
+            </div>
           </motion.div>
         </section>
         <section id ="contact" ref={contactRef}>
