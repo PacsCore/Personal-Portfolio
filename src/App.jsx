@@ -1,8 +1,11 @@
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useRef } from 'react'
+import { useState } from 'react'
 import './App.css'
 
   function App() {
+    const [theme, setTheme] = useState('dark')
+
     const aboutRef = useRef(null)
     const { scrollYProgress: aboutProgress } = useScroll({
       target: aboutRef,
@@ -31,7 +34,13 @@ import './App.css'
     const contactY = useTransform(contactProgress, [0, 0.5, 1], [100, 0, -100])
 
     return (
-      <div className="app">
+      <div className="app" data-theme={theme}>
+        <button
+          className="theme-toggle"
+          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+        >
+          {theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+        </button>
         <section id ="hero">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
