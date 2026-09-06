@@ -1,7 +1,39 @@
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion, useScroll, useTransform, useMotionValue } from 'framer-motion'
 import { useRef } from 'react'
 import { useState } from 'react'
 import './App.css'
+
+function TiltCard({ children, className }) {
+  const x = useMotionValue(0)
+  const y = useMotionValue(0)
+
+  const rotateX = useTransform(y, [-50, 50], [15, -15])
+  const rotateY = useTransform(x, [-50, 50], [-15, 15])
+
+  function handleMouseMove(e) {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const centerX = rect.left + rect.width / 2
+    const centerY = rect.top + rect.height / 2
+    x.set(e.clientX - centerX)
+    y.set(e.clientY - centerY)
+  }
+
+  function handleMouseLeave() {
+    x.set(0)
+    y.set(0)
+  }
+
+  return (
+    <motion.div
+      className={className}
+      style={{ rotateX, rotateY, transformPerspective: 400 }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
+      {children}
+    </motion.div>
+  )
+}
 
   function App() {
     const [theme, setTheme] = useState('dark')
@@ -47,8 +79,26 @@ import './App.css'
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
+
+            <TiltCard className="avatar-tilt">
+              <img src="https://github.com/PacsCore.png" alt="Enrique Achacoso" className="avatar-img" />
+            </TiltCard>
+
             <h1>Enrique Achacoso</h1>
             <p>Full-Stack Software Engineer in the making</p>
+
+            <div className="social-icons">
+              <TiltCard className="social-tilt">
+                <a href="https://github.com/PacsCore" target="_blank" rel="noopener noreferrer">
+                  <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/github.svg" alt="GitHub" className="icon-img" />
+                </a>
+              </TiltCard>
+              <TiltCard className="social-tilt">
+                <a href="https://x.com/pacscore?s=11" target="_blank" rel="noopener noreferrer">
+                  <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/x.svg" alt="X" className="icon-img" />
+                </a>
+              </TiltCard>
+            </div>
           </motion.div> 
         </section>
         <section id ="about" ref={aboutRef}>
