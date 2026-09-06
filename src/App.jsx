@@ -39,7 +39,7 @@ import './App.css'
           className="theme-toggle"
           onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
         >
-          {theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+          {theme === 'dark' ? '☀️' : '🌙'}
         </button>
         <section id ="hero">
           <motion.div
