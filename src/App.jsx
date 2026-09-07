@@ -35,7 +35,30 @@ function TiltCard({ children, className }) {
   )
 }
 
+const timelineData = [
+  { year: "2020",
+    title: "First Steps in Programming",
+    description: "Explored basic programming concepts in Scratch at school."
+   },
+
+  { year: "2023",
+    title: "Rise of AI",
+    description: "Started exploring AI and its applications, sparking a deeper interest in technology."
+   },
+
+   { year: "2025",
+    title: "Expanding Knowledge",
+    description: "Continued learning and building projects in web development with AI."
+   },
+
+   { year: "2026",
+    title: "Full Stack focus",
+    description: "Wrote my first lines of code in JavaScript, React, Node.js. Continueing to build projects and learn more about full-stack development."
+   }
+  ]
+
   function App() {
+    const [activeTimelineItem, setActiveTimelineItem] = useState(null)
     const [theme, setTheme] = useState('dark')
 
     const aboutRef = useRef(null)
@@ -102,16 +125,39 @@ function TiltCard({ children, className }) {
             </div>
           </motion.div> 
         </section>
-        <section id ="about" ref={aboutRef}>
-          <motion.div style=
-          {{ opacity: aboutOpacity, y: aboutY }}>
-            <h2>About Me</h2>
-            <p>I'm an 17-year-old completing my Matura (Austria high school diploma), moving from "vibe coding" 
-               to actually understanding what I build. Currently learning full-stack 
-               development one project at a time. Also showing interest in AI and Accounting. I have a passion for building things and learning new technologies.
-              </p>
-          </motion.div>
-        </section>
+        <section id="about" ref={aboutRef}>
+  <motion.div style={{ opacity: aboutOpacity, y: aboutY }}>
+    <h2>About Me</h2>
+    <p>I'm a 17-year-old completing my Matura (Austrian high school diploma), moving from "vibe coding" 
+       to actually understanding what I build.</p>
+
+    <div className="timeline">
+      {timelineData.map((item, index) => (
+        <div 
+          key={index} 
+          className={`timeline-item ${activeTimelineItem === index ? 'active' : ''}`}
+          onClick={() => setActiveTimelineItem(activeTimelineItem === index ? null : index)}
+        >
+          <div className="timeline-dot"></div>
+          <div className="timeline-content">
+            <span className="timeline-year">{item.year}</span>
+            <h3>{item.title}</h3>
+            {activeTimelineItem === index && (
+              <motion.p 
+                className="timeline-description"
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                transition={{ duration: 0.3 }}
+              >
+                {item.description}
+              </motion.p>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </motion.div>
+</section>
         <section id ="projects" ref={projectsRef}>
           <motion.div style=
           {{ opacity: projectsOpacity, y: projectsY }}>
