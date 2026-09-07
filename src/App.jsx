@@ -192,6 +192,15 @@ const timelineData = [
           {{ opacity: contactOpacity, y: contactY }}>
             <h2>Contact</h2>
             <p>Feel free to reach out to me!</p>
+
+            <div className="contact-links">
+              <TiltCard className="contact-card">
+                <a href="mailto:achacoso.enrique@proton.me" className="contact-link">
+                  <span className="contact-icon">✉️</span>
+                  <span className="contact-text">achacoso.enrique@proton.me</span>
+                </a>
+              </TiltCard>
+            </div>
           </motion.div>
         </section>
         <section id ="footer">
@@ -206,5 +215,7 @@ const timelineData = [
       </div>
     )
   }
+
+
 
   export default App

@@ -303,3 +303,32 @@ html, body, #root {
   margin-top: 0.5rem;
   overflow: hidden;
 }
+
+.contact-links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.contact-card {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1rem 2rem;
+}
+
+.contact-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.contact-text {
+  font-size: 1.1rem;
+  color: var(--accent);
+  font-weight: 500;
+}
