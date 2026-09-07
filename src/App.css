@@ -3,8 +3,8 @@
   --bg-secondary: #131826;
   --text-primary: #e8ecf1;
   --text-secondary: #8b93a7;
-  --accent: #4dd4d4;
-  --accent-glow: #5eead4;
+  --accent: #938ccd;
+  --accent-glow: #c38acf;
   --border: #232a3d;
 }
 
@@ -13,8 +13,8 @@
   --bg-secondary: #f0ede7;
   --text-primary: #1a1d29;
   --text-secondary: #5c6270;
-  --accent: #2dd4bf;
-  --accent-glow: #14b8a6;
+  --accent: #938ccd;
+  --accent-glow: #c38acf;
   --border: #e2ddd4;
 }
 
@@ -210,7 +210,7 @@ html, body, #root {
   border-radius: 50%;
   overflow: hidden;
   border: 2px solid var(--accent);
-  box-shadow: 0 0 30px
+  box-shadow: 0 0 30px var(--accent-glow);
 }
 
 .avatar-img {
