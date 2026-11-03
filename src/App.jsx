@@ -1,221 +1,241 @@
-import { motion, useScroll, useTransform, useMotionValue } from 'framer-motion'
-import { useRef } from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import {
+  AnimatePresence,
+  motion,
+  useReducedMotion,
+} from 'framer-motion'
+import { NavLink, Navigate, RouterProvider, createBrowserRouter, useLocation, useOutlet } from 'react-router-dom'
+import { FaDiscord, FaGithub, FaXTwitter } from 'react-icons/fa6'
+import { FiMail, FiMoon, FiSun } from 'react-icons/fi'
+import TiltCard from './components/TiltCard.jsx'
+import content from './data/content.js'
+import AboutPage from './pages/AboutPage.jsx'
+import ContactPage from './pages/ContactPage.jsx'
+import HomePage from './pages/HomePage.jsx'
+import ProjectsPage from './pages/ProjectsPage.jsx'
 import './App.css'
 
-function TiltCard({ children, className }) {
-  const x = useMotionValue(0)
-  const y = useMotionValue(0)
+const socialIcons = {
+  x: FaXTwitter,
+  email: FiMail,
+  github: FaGithub,
+  discord: FaDiscord,
+}
 
-  const rotateX = useTransform(y, [-50, 50], [15, -15])
-  const rotateY = useTransform(x, [-50, 50], [-15, 15])
-
-  function handleMouseMove(e) {
-    const rect = e.currentTarget.getBoundingClientRect()
-    const centerX = rect.left + rect.width / 2
-    const centerY = rect.top + rect.height / 2
-    x.set(e.clientX - centerX)
-    y.set(e.clientY - centerY)
+function getInitialTheme() {
+  try {
+    const savedTheme = window.localStorage.getItem('portfolio-theme')
+    return savedTheme === 'light' || savedTheme === 'dark' ? savedTheme : 'dark'
+  } catch (error) {
+    console.error('Unable to read the saved theme preference.', error)
+    return 'dark'
   }
+}
 
-  function handleMouseLeave() {
-    x.set(0)
-    y.set(0)
-  }
+function ThemeToggle({ theme, onToggle }) {
+  const ThemeIcon = theme === 'dark' ? FiSun : FiMoon
+  const label = theme === 'dark' ? content.ui.themeToLight : content.ui.themeToDark
 
   return (
-    <motion.div
-      className={className}
-      style={{ rotateX, rotateY, transformPerspective: 400 }}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
+    <button
+      className="theme-toggle"
+      type="button"
+      aria-label={label}
+      title={label}
+      onClick={onToggle}
     >
-      {children}
-    </motion.div>
+      <ThemeIcon aria-hidden="true" />
+    </button>
   )
 }
 
-const timelineData = [
-  { year: "2020",
-    title: "First Steps in Programming",
-    description: "Explored basic programming concepts in Scratch at school."
-   },
+function SocialLinks({ onToast }) {
+  const socials = Object.entries(content.socials)
 
-  { year: "2023",
-    title: "Rise of AI",
-    description: "Started exploring AI and its applications, sparking a deeper interest in technology."
-   },
+  async function copyDiscord(username) {
+    try {
+      if (!navigator.clipboard?.writeText) {
+        throw new Error('Clipboard access is unavailable in this browser.')
+      }
 
-   { year: "2025",
-    title: "Expanding Knowledge",
-    description: "Continued learning and building projects in web development with AI."
-   },
-
-   { year: "2026",
-    title: "Full Stack focus",
-    description: "Wrote my first lines of code in JavaScript, React, Node.js. Continueing to build projects and learn more about full-stack development."
-   }
-  ]
-
-  function App() {
-    const [activeTimelineItem, setActiveTimelineItem] = useState(null)
-    const [theme, setTheme] = useState('dark')
-
-    const aboutRef = useRef(null)
-    const { scrollYProgress: aboutProgress } = useScroll({
-      target: aboutRef,
-      offset: ["start end", "end start"]
-    })
-
-    const aboutOpacity = useTransform(aboutProgress, [0, 0.5, 1], [0, 1, 0])
-    const aboutY = useTransform(aboutProgress, [0, 0.5, 1], [100, 0, -100])
-
-    const projectsRef = useRef(null)
-    const { scrollYProgress: projectsProgress } = useScroll({
-      target: projectsRef,
-      offset: ["start end", "end start"]
-    })
-
-    const projectsOpacity = useTransform(projectsProgress, [0, 0.5, 1], [0, 1, 0])
-    const projectsY = useTransform(projectsProgress, [0, 0.5, 1], [100, 0, -100])
-
-    const contactRef = useRef(null)
-    const { scrollYProgress: contactProgress } = useScroll({
-      target: contactRef,
-      offset: ["start end", "end start"]
-    })
-
-    const contactOpacity = useTransform(contactProgress, [0, 0.5, 1], [0, 1, 0])
-    const contactY = useTransform(contactProgress, [0, 0.5, 1], [100, 0, -100])
-
-    return (
-      <div className="app" data-theme={theme}>
-        <button
-          className="theme-toggle"
-          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-        >
-          {theme === 'dark' ? '☀️' : '🌙'}
-        </button>
-        <section id ="hero">
-          <motion.div
-            style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          >
-
-            <TiltCard className="avatar-tilt">
-              <img src="https://github.com/PacsCore.png" alt="Enrique Achacoso" className="avatar-img" />
-            </TiltCard>
-
-            <h1>Enrique Achacoso</h1>
-            <p>Full-Stack Software Engineer in the making</p>
-
-            <div className="social-icons">
-              <TiltCard className="social-tilt">
-                <a href="https://github.com/PacsCore" target="_blank" rel="noopener noreferrer">
-                  <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/github.svg" alt="GitHub" className="icon-img" />
-                </a>
-              </TiltCard>
-              <TiltCard className="social-tilt">
-                <a href="https://x.com/pacscore?s=11" target="_blank" rel="noopener noreferrer">
-                  <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/x.svg" alt="X" className="icon-img" />
-                </a>
-              </TiltCard>
-            </div>
-          </motion.div> 
-        </section>
-        <section id="about" ref={aboutRef}>
-  <motion.div style={{ opacity: aboutOpacity, y: aboutY }}>
-    <h2>About Me</h2>
-    <p>I'm a 17-year-old completing my Matura (Austrian high school diploma), moving from "vibe coding" 
-       to actually understanding what I build.</p>
-
-    <div className="timeline">
-      {timelineData.map((item, index) => (
-        <div 
-          key={index} 
-          className={`timeline-item ${activeTimelineItem === index ? 'active' : ''}`}
-          onClick={() => setActiveTimelineItem(activeTimelineItem === index ? null : index)}
-        >
-          <div className="timeline-dot"></div>
-          <div className="timeline-content">
-            <span className="timeline-year">{item.year}</span>
-            <h3>{item.title}</h3>
-            {activeTimelineItem === index && (
-              <motion.p 
-                className="timeline-description"
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                transition={{ duration: 0.3 }}
-              >
-                {item.description}
-              </motion.p>
-            )}
-          </div>
-        </div>
-      ))}
-    </div>
-  </motion.div>
-</section>
-        <section id ="projects" ref={projectsRef}>
-          <motion.div style=
-          {{ opacity: projectsOpacity, y: projectsY }}>
-            <h2>Projects</h2>
-            <p>Here are some of the projects I've worked on:</p>
-            <div className="projects-grid">
-              <div className="project-card">
-                <h3>Homework Tracker</h3>
-                <p>A class-facing web application for shared homework entries, built with Firebase and Cloudinary</p>
-                <a href="https://github.com/PacsCore/homework-tracker" target="_blank">View on GitHub →
-                </a>
-              </div>
-
-              <div className="project-card">
-                <h3>Daily Idea Mailer</h3>
-                <p>A simple email client for sending daily coding idea updates, built with Javascript, Gemini and dev.to</p>
-                <a href="https://github.com/PacsCore/daily-idea-mailer" target="_blank">View on GitHub →
-                </a>
-              </div>
-
-              <div className="project-card">
-                <h3>Quick PDF Converter</h3>
-                <p>A simple tool for converting documents to PDF format, built with React and Node.js</p>
-                <a href="https://github.com/PacsCore/QuickFileConverter" target="_blank">View on GitHub →
-                </a>
-              </div>
-            </div>
-          </motion.div>
-        </section>
-        <section id ="contact" ref={contactRef}>
-          <motion.div style=
-          {{ opacity: contactOpacity, y: contactY }}>
-            <h2>Contact</h2>
-            <p>Feel free to reach out to me!</p>
-
-            <div className="contact-links">
-              <TiltCard className="contact-card">
-                <a href="mailto:achacoso.enrique@proton.me" className="contact-link">
-                  <span className="contact-icon">✉️</span>
-                  <span className="contact-text">achacoso.enrique@proton.me</span>
-                </a>
-              </TiltCard>
-            </div>
-          </motion.div>
-        </section>
-        <section id ="footer">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          >
-            <p>&copy; 2026 Enrique Achacoso. All rights reserved.</p>
-          </motion.div>
-        </section>
-      </div>
-    )
+      await navigator.clipboard.writeText(username)
+      onToast(content.ui.copySuccess)
+    } catch (error) {
+      console.error('Unable to copy the Discord username.', error)
+      onToast(content.ui.copyUnavailable)
+    }
   }
 
+  return (
+    <div className="social-links" aria-label={content.ui.socialLinksLabel}>
+      {socials.map(([network, details]) => {
+        const Icon = socialIcons[network]
 
+        if (network === 'discord') {
+          return (
+            <TiltCard className="social-tilt" key={network}>
+              <button
+                type="button"
+                className="social-link"
+                aria-label={details.ariaLabel}
+                title={details.ariaLabel}
+                onClick={() => copyDiscord(details.username)}
+              >
+                <Icon aria-hidden="true" />
+              </button>
+            </TiltCard>
+          )
+        }
 
-  export default App
+        const isEmail = network === 'email'
+        const href = isEmail ? `mailto:${details.address}` : details.href || '#'
+        const label = details.label
+
+        return (
+          <TiltCard className="social-tilt" key={network}>
+            <a
+              className="social-link"
+              href={href}
+              aria-label={label}
+              title={label}
+              onClick={(event) => {
+                if (!isEmail && !details.href) event.preventDefault()
+              }}
+              target={!isEmail && details.href ? '_blank' : undefined}
+              rel={!isEmail && details.href ? 'noreferrer' : undefined}
+            >
+              <Icon aria-hidden="true" />
+            </a>
+          </TiltCard>
+        )
+      })}
+    </div>
+  )
+}
+
+function SiteLayout() {
+  const outlet = useOutlet()
+  const location = useLocation()
+  const reduceMotion = useReducedMotion()
+  const [theme, setTheme] = useState(getInitialTheme)
+  const [toast, setToast] = useState('')
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme
+
+    try {
+      window.localStorage.setItem('portfolio-theme', theme)
+    } catch (error) {
+      console.error('Unable to save the theme preference.', error)
+    }
+  }, [theme])
+
+  useEffect(() => {
+    document.title = `${content.name} | Portfolio`
+  }, [])
+
+  useEffect(() => {
+    if (!toast) return undefined
+
+    const timeoutId = window.setTimeout(() => setToast(''), 1800)
+    return () => window.clearTimeout(timeoutId)
+  }, [toast])
+
+  const pageTransition = reduceMotion
+    ? { duration: 0 }
+    : { duration: 0.32, ease: [0.22, 1, 0.36, 1] }
+
+  return (
+    <div className="site-shell">
+      <header className="site-header">
+        <nav className="nav-pill" aria-label={content.ui.navigationLabel}>
+          <NavLink className="site-name" to="/" end>
+            {content.name}
+          </NavLink>
+          <div className="nav-links">
+            {content.navigation.map((item) => (
+              <NavLink
+                className={({ isActive }) => `nav-link${isActive ? ' is-active' : ''}`}
+                end={item.end}
+                key={item.to}
+                to={item.to}
+              >
+                {({ isActive }) => (
+                  <>
+                    {isActive && (
+                      <motion.span
+                        className="nav-active-indicator"
+                        layoutId="active-nav-pill"
+                        transition={pageTransition}
+                      />
+                    )}
+                    <span className="nav-link-label">{item.label}</span>
+                  </>
+                )}
+              </NavLink>
+            ))}
+          </div>
+          <ThemeToggle
+            theme={theme}
+            onToggle={() => setTheme((current) => (current === 'dark' ? 'light' : 'dark'))}
+          />
+        </nav>
+      </header>
+
+      <main className="page-main">
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            className="page-transition"
+            key={location.pathname}
+            initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={reduceMotion ? { opacity: 1 } : { opacity: 0, y: -7 }}
+            transition={pageTransition}
+          >
+            {outlet}
+          </motion.div>
+        </AnimatePresence>
+      </main>
+
+      <footer className="site-footer">
+        <SocialLinks onToast={setToast} />
+        <p>© {new Date().getFullYear()} {content.name}. {content.copyright}</p>
+      </footer>
+
+      <AnimatePresence>
+        {toast && (
+          <motion.div
+            className="toast"
+            role="status"
+            aria-live="polite"
+            initial={reduceMotion ? false : { opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 4 }}
+            transition={{ duration: reduceMotion ? 0 : 0.18 }}
+          >
+            {toast}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
+
+const router = createBrowserRouter([
+  {
+    element: <SiteLayout />,
+    children: [
+      { path: '/', element: <HomePage /> },
+      { path: '/about', element: <AboutPage /> },
+      { path: '/projects', element: <ProjectsPage /> },
+      { path: '/contact', element: <ContactPage /> },
+      { path: '*', element: <Navigate to="/" replace /> },
+    ],
+  },
+])
+
+function App() {
+  return <RouterProvider router={router} />
+}
+
+export default App
