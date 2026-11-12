@@ -1,7 +1,7 @@
-import { motion, useReducedMotion, useTransform } from 'framer-motion'
+import { motion, useReducedMotionConfig, useTransform } from 'framer-motion'
 
 function ParallaxImage({ image, progress, speed = 24, className = '' }) {
-  const reduceMotion = useReducedMotion()
+  const reduceMotion = useReducedMotionConfig()
   const y = useTransform(progress, [0, 1], [0, reduceMotion ? 0 : speed])
 
   return (

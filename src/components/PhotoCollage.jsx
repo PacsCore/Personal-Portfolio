@@ -1,11 +1,11 @@
 import { useRef } from 'react'
-import { motion, useMotionValue, useReducedMotion, useScroll, useTransform } from 'framer-motion'
+import { motion, useMotionValue, useReducedMotionConfig, useScroll, useTransform } from 'framer-motion'
 import content from '../data/content.js'
 
 const rotations = [-8, 5, -3]
 
 function CollagePhoto({ image, index, pointerX, pointerY, progress }) {
-  const reduceMotion = useReducedMotion()
+  const reduceMotion = useReducedMotionConfig()
   const x = useTransform([pointerX, progress], ([pointer, scroll]) => (
     reduceMotion ? 0 : pointer * (12 + index * 3) + (scroll - 0.5) * (index - 1) * 10
   ))

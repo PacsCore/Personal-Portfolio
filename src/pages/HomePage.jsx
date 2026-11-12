@@ -1,12 +1,12 @@
 import { useRef } from 'react'
-import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
+import { motion, useReducedMotionConfig, useScroll, useTransform } from 'framer-motion'
 import ParallaxImage from '../components/ParallaxImage.jsx'
 import { Reveal, StaggerGroup, StaggerItem } from '../components/Reveal.jsx'
 import content from '../data/content.js'
 
 function HomePage() {
   const heroRef = useRef(null)
-  const reduceMotion = useReducedMotion()
+  const reduceMotion = useReducedMotionConfig()
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ['start start', 'end start'],

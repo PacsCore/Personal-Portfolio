@@ -1,8 +1,6 @@
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 
 function Toast({ message }) {
-  const reduceMotion = useReducedMotion()
-
   return (
     <AnimatePresence>
       {message && (
@@ -10,10 +8,10 @@ function Toast({ message }) {
           className="toast"
           role="status"
           aria-live="polite"
-          initial={reduceMotion ? false : { opacity: 0, y: 8 }}
+          initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 4 }}
-          transition={{ duration: reduceMotion ? 0 : 0.18 }}
+          transition={{ duration: 0.18 }}
         >
           {message}
         </motion.div>

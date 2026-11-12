@@ -1,20 +1,20 @@
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { useLocation, useOutlet } from 'react-router-dom'
+import { pageTransition } from '../../lib/motion.js'
 
-function PageTransition({ transition }) {
+function PageTransition() {
   const outlet = useOutlet()
   const location = useLocation()
-  const reduceMotion = useReducedMotion()
 
   return (
     <AnimatePresence mode="wait" initial={false}>
       <motion.div
         className="page-transition"
         key={location.pathname}
-        initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        exit={reduceMotion ? { opacity: 1 } : { opacity: 0, y: -7 }}
-        transition={transition}
+        exit={{ opacity: 0, y: -7 }}
+        transition={pageTransition}
       >
         {outlet}
       </motion.div>

@@ -1,9 +1,10 @@
 import { motion } from 'framer-motion'
 import { NavLink } from 'react-router-dom'
 import content from '../../data/content.js'
+import { pageTransition } from '../../lib/motion.js'
 import ThemeToggle from '../ui/ThemeToggle.jsx'
 
-function SiteHeader({ theme, onToggleTheme, indicatorTransition }) {
+function SiteHeader({ theme, onToggleTheme }) {
   return (
     <header className="site-header">
       <nav className="nav-pill" aria-label={content.ui.navigationLabel}>
@@ -24,7 +25,7 @@ function SiteHeader({ theme, onToggleTheme, indicatorTransition }) {
                     <motion.span
                       className="nav-active-indicator"
                       layoutId="active-nav-pill"
-                      transition={indicatorTransition}
+                      transition={pageTransition}
                     />
                   )}
                   <span className="nav-link-label">{item.label}</span>

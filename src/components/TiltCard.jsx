@@ -1,9 +1,9 @@
-import { motion, useMotionValue, useReducedMotion, useTransform } from 'framer-motion'
+import { motion, useMotionValue, useReducedMotionConfig, useTransform } from 'framer-motion'
 
 function TiltCard({ children, className = '' }) {
   const pointerX = useMotionValue(0)
   const pointerY = useMotionValue(0)
-  const reduceMotion = useReducedMotion()
+  const reduceMotion = useReducedMotionConfig()
   const rotateX = useTransform(pointerY, [-0.5, 0.5], [5, -5])
   const rotateY = useTransform(pointerX, [-0.5, 0.5], [-5, 5])
 

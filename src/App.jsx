@@ -1,3 +1,4 @@
+import { MotionConfig } from 'framer-motion'
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 import SiteLayout from './components/layout/SiteLayout.jsx'
 import AboutPage from './pages/AboutPage.jsx'
@@ -20,7 +21,11 @@ const router = createBrowserRouter([
 ])
 
 function App() {
-  return <RouterProvider router={router} />
+  return (
+    <MotionConfig reducedMotion="user">
+      <RouterProvider router={router} />
+    </MotionConfig>
+  )
 }
 
 export default App

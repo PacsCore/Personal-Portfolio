@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { useReducedMotion } from 'framer-motion'
 import content from '../../data/content.js'
 import useTheme from '../../hooks/useTheme.js'
 import Toast from '../ui/Toast.jsx'
@@ -8,7 +7,6 @@ import SiteFooter from './SiteFooter.jsx'
 import SiteHeader from './SiteHeader.jsx'
 
 function SiteLayout() {
-  const reduceMotion = useReducedMotion()
   const { theme, toggleTheme } = useTheme()
   const [toast, setToast] = useState('')
 
@@ -23,20 +21,12 @@ function SiteLayout() {
     return () => window.clearTimeout(timeoutId)
   }, [toast])
 
-  const pageTransition = reduceMotion
-    ? { duration: 0 }
-    : { duration: 0.32, ease: [0.22, 1, 0.36, 1] }
-
   return (
     <div className="site-shell">
-      <SiteHeader
-        theme={theme}
-        onToggleTheme={toggleTheme}
-        indicatorTransition={pageTransition}
-      />
+      <SiteHeader theme={theme} onToggleTheme={toggleTheme} />
 
       <main className="page-main">
-        <PageTransition transition={pageTransition} />
+        <PageTransition />
       </main>
 
       <SiteFooter onToast={setToast} />
