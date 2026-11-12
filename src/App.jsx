@@ -14,7 +14,8 @@ const router = createBrowserRouter([
   {
     element: <SiteLayout />,
     children: [
-      { path: '/', element: <HomePage /> },
+      // The homepage ends with its own colophon instead of the site footer.
+      { path: '/', element: <HomePage />, handle: { footer: false } },
       { path: '/about', element: <AboutPage />, handle: { title: content.sectionTitles.about } },
       { path: '/projects', element: <ProjectsPage />, handle: { title: content.sectionTitles.projects } },
       { path: '/contact', element: <ContactPage />, handle: { title: content.sectionTitles.contact } },

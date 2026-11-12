@@ -49,6 +49,11 @@
   --tone-clay: #c99a86;
   --tone-steel: #8da8be;
 
+  /* Image stand-ins (until real photographs exist) and print grain */
+  --color-standin-top: #1e2731;
+  --color-standin-bottom: #2a3541;
+  --texture-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+
   /* ---- Typography ---- */
   /* Current UI font. The brand families below are loaded on demand (styles/fonts.css)
      and activate in Phase 1B by pointing components at --font-sans / -mono / -serif. */
@@ -71,6 +76,9 @@
   --leading-snug: 1.15;
   --leading-normal: 1.5;
   --leading-relaxed: 1.65;
+
+  /* Display weight is optically compensated: lighter on dark backgrounds. */
+  --weight-display: 420;
 
   --tracking-display: -0.055em;
   --tracking-tight: -0.045em;
@@ -166,6 +174,10 @@
 
   --tone-clay: #a8705c;
   --tone-steel: #4e6c86;
+
+  --color-standin-top: #e7e8e5;
+  --color-standin-bottom: #d3d8da;
+  --weight-display: 560;
 
   --shadow-float: 0 12px 32px -16px rgb(22 29 37 / 14%);
 }

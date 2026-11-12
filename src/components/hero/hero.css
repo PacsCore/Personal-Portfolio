@@ -11,15 +11,15 @@
  */
 
 .hero {
-  --hero-title-weight: 420;
-  --hero-photo-top: #1e2731;
-  --hero-photo-bottom: #2a3541;
+  --hero-title-weight: var(--weight-display);
+  --hero-photo-top: var(--color-standin-top);
+  --hero-photo-bottom: var(--color-standin-bottom);
   --hero-ink: color-mix(in srgb, var(--color-accent) 46%, var(--color-bg));
   --hero-ink-offset: 12px;
   --hero-tint: 0.1;
   --hero-grain-opacity: 0.14;
   --hero-contour-opacity: 0.26;
-  --hero-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --hero-grain: var(--texture-grain);
 
   position: relative;
   isolation: isolate;
@@ -27,9 +27,6 @@
 }
 
 :root[data-theme="light"] .hero {
-  --hero-title-weight: 560;
-  --hero-photo-top: #e7e8e5;
-  --hero-photo-bottom: #d3d8da;
   --hero-ink: color-mix(in srgb, var(--color-accent) 72%, var(--color-bg));
   --hero-tint: 0.14;
   --hero-grain-opacity: 0.2;
@@ -425,7 +422,8 @@
   }
 
   .hero-inner {
-    min-height: min(calc(100svh - 69px), 900px);
+    /* Leaves the next section's rule just in view, so the page reads as continuous. */
+    min-height: min(calc(100svh - 69px - 56px), 860px);
     grid-template-columns: repeat(12, minmax(0, 1fr));
     grid-template-rows: auto 1fr;
     column-gap: var(--space-5);

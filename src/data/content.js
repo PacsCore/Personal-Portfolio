@@ -40,13 +40,67 @@ const content = {
       position: '50% 50%',
     },
   },
+  // ---- Homepage sections (M2) ----
+  // `null` means "not confirmed yet": it renders as a dev-only placeholder and is
+  // omitted from production builds. Never fill these with invented details.
+  identity: {
+    number: '02',
+    label: 'Identity',
+    intro: null, // EDIT ME: 2–3 sentences in your own words
+    portrait: { src: null, alt: 'Portrait of Enrique Achacoso' }, // EDIT ME
+    caption: 'Portrait — E. Achacoso',
+    facts: [
+      { term: 'Name', value: 'Enrique Achacoso' },
+      { term: 'Role', value: 'Software Engineer & Creative Developer' },
+      { term: 'Based', value: 'Vienna, AT' },
+      { term: 'Focus', value: 'Engineering, Design' },
+    ],
+    link: { label: 'More about me', to: '/about' },
+  },
+  work: {
+    number: '03',
+    label: 'Selected work',
+    allLink: { label: 'All projects', to: '/projects' },
+    // EDIT ME: genuine projects only. Image: 16:10, at least 1600px wide.
+    projects: [
+      { title: 'SwipeShip', description: null, role: null, stack: null, year: null, href: null, image: { src: null, alt: '' } },
+      { title: 'CoreBlog', description: null, role: null, stack: null, year: null, href: null, image: { src: null, alt: '' } },
+    ],
+  },
+  process: {
+    number: '04',
+    label: 'Process',
+    // Temporary copy, approved for now.
+    steps: [
+      { name: 'Observe', text: 'Understand the people, context and constraints.' },
+      { name: 'Sketch', text: 'Explore directions on paper and in prototypes.' },
+      { name: 'Build', text: 'Engineer it with care for detail.' },
+      { name: 'Refine', text: 'Test, measure, polish.' },
+      { name: 'Ship', text: 'Release, then keep learning.' },
+    ],
+  },
+  contact: {
+    number: '05',
+    label: 'Contact',
+    // Temporary copy, approved for now.
+    heading: { lead: "Let's build something", accent: 'considered.' },
+    // Email and profile URLs come from `socials` below (single source).
+    profiles: ['github', 'x'],
+    copyLabel: 'Copy email',
+    copied: 'Email copied',
+  },
+  colophon: {
+    label: 'Colophon',
+    type: 'Set in Instrument Sans, Instrument Serif and IBM Plex Mono.',
+    inksLabel: 'Two inks',
+    built: 'Built with React and Vite.',
+  },
   placeholders: {
     email: 'your-email@example.com',
   },
   ui: {
     navigationLabel: 'Main navigation',
     skipToContent: 'Skip to content',
-    galleryLabel: 'Image gallery',
     collageLabel: 'Three image placeholders',
     socialLinksLabel: 'Social links',
     technologyTagsLabel: 'Technology tags',
@@ -61,7 +115,6 @@ const content = {
       work: '03 / Work',
       projects: '01 / Work',
       contact: '01 / Contact',
-      aboutNote: 'A little more',
     },
   },
   navigation: [
@@ -78,14 +131,6 @@ const content = {
     contact: 'Contact',
   },
   images: {
-    hero: {
-      src: '/placeholder.svg',
-      alt: 'Hero image placeholder',
-    },
-    gallery: Array.from({ length: 4 }, (_, index) => ({
-      src: '/placeholder.svg',
-      alt: `Gallery image placeholder ${index + 1}`,
-    })),
     collage: [
       { src: '/placeholder.svg', alt: 'About image placeholder 1' },
       { src: '/placeholder.svg', alt: 'About image placeholder 2' },
@@ -132,7 +177,7 @@ const content = {
       href: '',
     },
   ],
-  // EDIT ME: Add your profile URLs, email address, and Discord username.
+  // EDIT ME: verified details only. Empty values are not rendered on the homepage.
   socials: {
     x: { href: '', label: 'X' },
     email: { address: '', label: 'Email' },

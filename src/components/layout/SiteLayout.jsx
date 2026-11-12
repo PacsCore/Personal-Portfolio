@@ -27,6 +27,7 @@ function SiteLayout() {
   const [toast, setToast] = useState('')
   const matches = useMatches()
   const pageTitle = matches.at(-1)?.handle?.title
+  const showFooter = matches.at(-1)?.handle?.footer !== false
 
   useEffect(() => {
     document.title = pageTitle ? `${pageTitle} | ${content.name}` : `${content.name} | Portfolio`
@@ -48,7 +49,7 @@ function SiteLayout() {
         <PageTransition />
       </main>
 
-      <SiteFooter onToast={setToast} />
+      {showFooter && <SiteFooter onToast={setToast} />}
       <Toast message={toast} />
     </div>
   )

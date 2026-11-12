@@ -1,0 +1,678 @@
+/*
+ * Homepage sections 02–05 ("plates").
+ * Same container and 12-column grid as the hero; content starts on column 2,
+ * the hero's copy line. Each plate opens with a hairline and a number marker.
+ * Stacked below 768px, two-up 768–1023px, full grid from 1024px.
+ */
+
+.plate {
+  font-family: var(--font-sans);
+}
+
+.plate-inner {
+  width: min(var(--container-max), calc(100% - 2 * var(--gutter)));
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-6);
+  margin: 0 auto;
+  padding-top: clamp(28px, 4vw, 44px);
+  border-top: 1px solid var(--color-border);
+}
+
+.plate + .plate .plate-inner,
+.hero + .plate .plate-inner {
+  margin-top: clamp(48px, 8vw, 120px);
+}
+
+/* ---- Plate header ---- */
+
+.plate-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-4);
+}
+
+.plate-number {
+  color: var(--color-text-quiet);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.plate-number::after {
+  width: clamp(20px, 2.5vw, 36px);
+  height: 1px;
+  display: inline-block;
+  margin-left: var(--space-3);
+  background: var(--color-border-strong);
+  content: "";
+  vertical-align: middle;
+}
+
+.plate-label {
+  margin: 0;
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: var(--tracking-caps);
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.plate-aside {
+  margin-left: auto;
+}
+
+/* ---- Shared pieces ---- */
+
+.text-link {
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 8px 0 5px;
+  border-bottom: 1px solid var(--color-accent);
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  transition: color var(--duration-fast) ease, border-color var(--duration-fast) ease;
+}
+
+.text-link svg {
+  color: var(--color-accent-text);
+}
+
+.text-link:hover {
+  border-bottom-color: var(--color-accent-text);
+  color: var(--color-accent-text);
+}
+
+.fact-list {
+  margin: 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.fact-row {
+  display: grid;
+  grid-template-columns: 8ch minmax(0, 1fr);
+  gap: var(--space-4);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.fact-row dt {
+  color: var(--color-text-quiet);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-caps);
+  line-height: 1.9;
+  text-transform: uppercase;
+}
+
+.fact-row dd {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+/* Image stand-ins share the hero's tonal plate and grain. */
+.portrait-standin,
+.sheet-standin {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(var(--color-standin-top), var(--color-standin-bottom));
+}
+
+.portrait-standin::after,
+.sheet-standin::after {
+  position: absolute;
+  inset: 0;
+  background: var(--texture-grain);
+  content: "";
+  mix-blend-mode: soft-light;
+  opacity: 0.16;
+  pointer-events: none;
+}
+
+/* Development-only marker for unconfirmed content (see ui/Pending.jsx). */
+.pending {
+  width: fit-content;
+  display: block;
+  color: var(--color-text-quiet);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-style: normal;
+  letter-spacing: 0;
+  text-decoration: underline dashed var(--color-border-control);
+  text-underline-offset: 4px;
+}
+
+/* ---- 02 Identity ---- */
+
+.portrait {
+  margin: 0;
+}
+
+.portrait-frame {
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+}
+
+.portrait-photo {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  filter: grayscale(1);
+}
+
+.portrait-caption {
+  margin-top: var(--space-3);
+  color: var(--color-text-quiet);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+
+.identity-portrait {
+  width: min(80%, 360px);
+}
+
+.identity-body {
+  min-width: 0;
+  display: grid;
+  gap: clamp(28px, 3.4vw, 44px);
+  align-content: start;
+}
+
+.identity-intro {
+  max-width: 24ch;
+  margin: 0;
+  color: var(--color-text);
+  font-family: var(--font-serif);
+  font-size: clamp(1.75rem, 3vw, 2.75rem);
+  font-style: italic;
+  line-height: 1.15;
+  text-box: trim-both cap alphabetic;
+}
+
+.identity .fact-list {
+  max-width: 34rem;
+}
+
+/* ---- 03 Selected work ---- */
+
+.sheet-list {
+  display: grid;
+}
+
+.sheet {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-5);
+  padding-block: clamp(32px, 5vw, 72px);
+  border-top: 1px solid var(--color-border);
+}
+
+.sheet:first-child {
+  border-top: 0;
+  padding-top: var(--space-4);
+}
+
+.sheet:last-child {
+  padding-bottom: 0;
+}
+
+.sheet-index {
+  color: var(--color-text-quiet);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.sheet-title {
+  margin: 0;
+  color: var(--color-text);
+  font-size: clamp(2.75rem, 6.4vw, 6rem);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--tracking-tight);
+  line-height: 0.95;
+  overflow-wrap: anywhere;
+  text-box: trim-both cap alphabetic;
+}
+
+.sheet-media {
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+}
+
+.sheet-media img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  filter: grayscale(1);
+}
+
+.sheet-details {
+  min-width: 0;
+  display: grid;
+  gap: var(--space-5);
+  align-content: end;
+}
+
+.sheet-description {
+  max-width: 38ch;
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* ---- 04 Process ---- */
+
+.profile-chart {
+  position: relative;
+  aspect-ratio: 1000 / 240;
+}
+
+.profile-chart svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.profile-area {
+  fill: var(--color-accent);
+  fill-opacity: 0.07;
+}
+
+:root[data-theme="light"] .profile-area {
+  fill-opacity: 0.12;
+}
+
+.profile-line {
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+/* A node is a dashed drop line from the station to the chart's base;
+   its ::before is the station marker sitting on the profile line. */
+.profile-node {
+  position: absolute;
+  top: var(--y);
+  bottom: 0;
+  left: var(--x);
+}
+
+.profile-node::before {
+  position: absolute;
+  top: -5px;
+  left: -5.5px;
+  width: 10px;
+  height: 10px;
+  border: 1.5px solid var(--color-accent);
+  border-radius: 50%;
+  background: var(--color-bg);
+  content: "";
+}
+
+.profile-node.is-summit::before {
+  background: var(--color-accent);
+}
+
+.profile-steps {
+  display: grid;
+  margin: var(--space-5) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.profile-step {
+  position: relative;
+  display: grid;
+  grid-template-columns: 3ch minmax(0, 1fr);
+  column-gap: var(--space-3);
+  padding: 0 0 var(--space-5) var(--space-5);
+  border-left: 1px solid var(--color-border-strong);
+}
+
+.profile-step::before {
+  position: absolute;
+  top: 4px;
+  left: -5px;
+  width: 9px;
+  height: 9px;
+  border: 1.5px solid var(--color-accent);
+  border-radius: 50%;
+  background: var(--color-bg);
+  content: "";
+}
+
+.profile-step:last-child {
+  padding-bottom: 0;
+}
+
+.profile-step:last-child::before {
+  background: var(--color-accent);
+}
+
+.profile-step-number {
+  grid-row: 1 / 3;
+  color: var(--color-text-quiet);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: 1.9;
+}
+
+.profile-step-name {
+  margin: 0 0 var(--space-1);
+  color: var(--color-text);
+  font-size: 1.25rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.profile-step-text {
+  max-width: 26ch;
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  line-height: 1.55;
+}
+
+/* ---- 05 Contact ---- */
+
+.contact .plate-inner {
+  padding-bottom: var(--space-2);
+}
+
+.contact-heading {
+  margin: 0;
+  color: var(--color-text);
+  font-size: clamp(2.6rem, 7.2vw, 7rem);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--tracking-tight);
+  line-height: 0.98;
+  text-wrap: balance;
+}
+
+.contact-heading em {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+.contact-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-5) var(--space-7);
+}
+
+.contact-email-row {
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-3) var(--space-5);
+}
+
+.contact-mail {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--color-accent);
+  color: var(--color-text);
+  font-size: clamp(1.25rem, 2.4vw, 2rem);
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+}
+
+.contact-copy {
+  padding: 6px 10px;
+  border: 1px solid var(--color-border-control);
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+
+.contact-copy:hover {
+  color: var(--color-text);
+}
+
+.contact-status {
+  color: var(--color-accent-text);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+
+.contact-profiles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Colophon */
+.colophon {
+  display: grid;
+  gap: var(--space-3);
+  margin-top: clamp(24px, 5vw, 72px);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-quiet);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  line-height: 1.7;
+}
+
+.colophon p,
+.colophon-label {
+  margin: 0;
+}
+
+.colophon-label {
+  color: var(--color-text);
+  font-size: var(--text-2xs);
+  font-weight: 500;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+
+.colophon-inks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+}
+
+.ink-swatch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ink-chip {
+  width: 9px;
+  height: 9px;
+}
+
+.ink-chip-text {
+  background: var(--color-text);
+}
+
+.ink-chip-steel {
+  background: var(--color-accent);
+}
+
+/* ---- Tablet ---- */
+
+@media (min-width: 768px) {
+  /* Identity: portrait and text side by side. */
+  .identity .plate-inner {
+    grid-template-columns: 5fr 7fr;
+    column-gap: var(--space-7);
+  }
+
+  .identity .plate-header {
+    grid-column: 1 / -1;
+  }
+
+  .identity-portrait {
+    width: auto;
+  }
+
+  /* Process: stations become columns under the profile, joined by drop lines. */
+  .profile-node {
+    border-left: 1px dashed var(--color-border-strong);
+  }
+
+  .profile-steps {
+    grid-template-columns: repeat(var(--steps), minmax(0, 1fr));
+    margin-top: 0;
+  }
+
+  .profile-step {
+    display: block;
+    margin-left: 10%;
+    padding: var(--space-5) var(--space-4) 0 var(--space-3);
+    border-left: 1px dashed var(--color-border-strong);
+  }
+
+  .profile-step::before {
+    display: none;
+  }
+
+  .profile-step-number {
+    display: block;
+  }
+
+  .profile-step-name {
+    margin-top: var(--space-2);
+  }
+
+  .colophon {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--space-6);
+  }
+}
+
+/* ---- Desktop: content on the hero's grid (columns 2–12) ---- */
+
+@media (min-width: 1024px) {
+  .plate-inner,
+  .identity .plate-inner {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--space-5);
+    row-gap: clamp(40px, 4.5vw, 64px);
+  }
+
+  .plate-header {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    align-items: center;
+  }
+
+  .plate-number {
+    grid-column: 1;
+  }
+
+  .plate-label {
+    grid-column: 2 / 9;
+  }
+
+  .plate-aside {
+    grid-column: 9 / 13;
+    justify-self: end;
+  }
+
+  /* Identity */
+  .identity-portrait {
+    grid-column: 2 / 6;
+  }
+
+  .identity-body {
+    grid-column: 7 / 12;
+  }
+
+  /* Work */
+  .sheet-list {
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+  }
+
+  .sheet {
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    row-gap: clamp(28px, 3vw, 44px);
+  }
+
+  .sheet-index {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: start;
+  }
+
+  .sheet-title {
+    grid-column: 2 / 13;
+    grid-row: 1;
+  }
+
+  .sheet-media {
+    grid-column: 2 / 9;
+    grid-row: 2;
+  }
+
+  .sheet-details {
+    grid-column: 10 / 13;
+    grid-row: 2;
+  }
+
+  .sheet-reverse .sheet-media {
+    grid-column: 6 / 13;
+  }
+
+  .sheet-reverse .sheet-details {
+    grid-column: 2 / 5;
+  }
+
+  /* Process */
+  .profile {
+    grid-column: 2 / 13;
+  }
+
+  /* Contact */
+  .contact-heading,
+  .contact-row {
+    grid-column: 2 / 13;
+  }
+
+  .colophon {
+    grid-column: 2 / 13;
+    grid-template-columns: 2fr 4fr 3fr 3fr;
+  }
+}

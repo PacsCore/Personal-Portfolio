@@ -207,8 +207,7 @@ a:focus-visible {
   padding: var(--page-padding-top, clamp(54px, 9vw, 88px)) 0 72px;
 }
 
-.page-transition > *,
-.home-page > * {
+.page-transition > * {
   min-width: 0;
   grid-column: content;
 }
@@ -223,12 +222,10 @@ a:focus-visible {
   grid-template-columns: subgrid;
 }
 
-.home-page > .hero {
+/* Every homepage section is full-bleed and sets its own container. */
+.home-page > * {
+  min-width: 0;
   grid-column: full;
-}
-
-.home-gallery {
-  margin-top: clamp(56px, 9vw, 112px);
 }
 
 .eyebrow {
@@ -275,14 +272,12 @@ h3 {
   font-weight: 570;
 }
 
-.page-heading p,
-.home-note > div > p:last-child {
+.page-heading p {
   max-width: 58ch;
   margin-bottom: 0;
   color: var(--color-text-muted);
 }
 
-.gallery-image::after,
 .collage-photo::after {
   position: absolute;
   inset: 0;
@@ -291,42 +286,11 @@ h3 {
   pointer-events: none;
 }
 
-.gallery-image img,
 .collage-photo img {
   width: 100%;
   height: 100%;
   display: block;
   object-fit: cover;
-}
-
-.image-gallery {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
-  margin-top: 12px;
-}
-
-.gallery-image {
-  position: relative;
-  height: clamp(70px, 14vw, 112px);
-  overflow: hidden;
-  border: 1px solid var(--color-border);
-  border-radius: 3px;
-  background: var(--color-placeholder);
-}
-
-.home-note {
-  margin-top: clamp(72px, 12vw, 112px);
-  padding-top: 24px;
-  border-top: 1px solid var(--color-border);
-}
-
-.home-note .eyebrow {
-  margin-bottom: 8px;
-}
-
-.home-note > div > p:last-child {
-  font-size: 1.08rem;
 }
 
 .content-page {
@@ -683,15 +647,6 @@ h3 {
     --content-width: calc(100% - 36px);
     --page-padding-top: 58px;
     padding-bottom: 58px;
-  }
-
-  .image-gallery {
-    gap: 7px;
-    margin-top: 8px;
-  }
-
-  .gallery-image {
-    height: 68px;
   }
 
   .project-card {
