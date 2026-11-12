@@ -1,91 +1,50 @@
 /*
- * Design tokens — Steel Blue
+ * Design tokens. Components use these semantic tokens only.
+ * `data-theme` on <html> is set before first paint by the inline script in
+ * index.html and kept in sync by src/hooks/useTheme.js (theme colors live there too).
  *
- * Components use these semantic tokens only; never hard-code a color.
- * Dark is the default theme. `data-theme` on <html> is set before first paint by
- * the inline script in index.html and kept in sync by src/hooks/useTheme.js.
- *
- * Contrast (WCAG 2.x, against bg / surface / surface-raised):
- *   text          dark 15.0 / 13.8 / 12.2   light 15.3 / 16.3 / 14.0
- *   text-muted    dark  8.5 /  7.9 /  7.0   light  6.7 /  7.1 /  6.1
- *   text-quiet    dark  5.7 /  5.2 /  4.6   light  4.9 /  5.2 /  4.5
- *   accent-text   dark  7.2 /  6.6 /  5.9   light  4.95 / 5.3 /  4.55
- *   focus         dark 10.8                 light  6.5
- *   border-control dark 4.1 / 3.3 (raised)  light  3.5 / 3.2 (raised)
- * `--color-accent` is 3.05:1 on the light background: use it for fills, lines
- * and large display text only — small text and icons use `--color-accent-text`.
+ * `--color-accent` is decorative (lines, dots, fills). Small text in the accent
+ * hue uses `--color-accent-text`, which passes 4.5:1 in both themes.
  */
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 
-  /* ---- Color: dark (default) ---- */
-  --color-bg: #121820;
-  --color-bg-sunken: #0e141b;
-  --color-surface: #18202a;
-  --color-surface-raised: #202a35;
+  /* ---- Color: light (warm off-white) ---- */
+  --color-bg: #f7f5f1;
+  --color-surface: #efece6;
+  --color-surface-hover: #e8e5de;
+  --color-text: #1b1d20;
+  --color-text-muted: #51555b;
+  --color-text-quiet: #6b6f75;
+  --color-accent: #8aa1b4;
+  --color-accent-text: #4e6c86;
+  --color-border: #e2ded6;
+  --color-border-strong: #cfcac0;
+  --color-focus: #3f5a72;
+  --color-selection: color-mix(in srgb, #8aa1b4 32%, transparent);
 
-  --color-text: #e8ecef;
-  --color-text-muted: #a9b5bf;
-  --color-text-quiet: #8593a0;
-
-  --color-accent: #718fa8;
-  --color-accent-text: #8da8be;
-  --color-accent-hover: #bccbd7;
-  --color-accent-fill: #8da8be; /* solid buttons; --color-on-accent on it: 7.5 */
-  --color-accent-subtle: color-mix(in srgb, #718fa8 14%, transparent);
-  --color-on-accent: #0e141b;
-  --color-secondary: #bccbd7;
-
-  --color-border: #26313c;
-  --color-border-strong: #3a4754;
-  --color-border-control: #6b7b8a;
-  --color-focus: #bccbd7;
-
-  --color-grid-line: color-mix(in srgb, #bccbd7 6%, transparent);
-  --color-placeholder: #263140;
-  --color-selection: color-mix(in srgb, #718fa8 35%, transparent);
-
-  --tone-clay: #c99a86;
-  --tone-steel: #8da8be;
-
-  /* Image stand-ins (until real photographs exist) and print grain */
-  --color-standin-top: #1e2731;
-  --color-standin-bottom: #2a3541;
-  --texture-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  /* ASCII inks */
+  --ink-near: #24272b;
+  --ink-far: #8b939b;
+  --ink-sky: #6f8aa1;
 
   /* ---- Typography ---- */
-  /* Current UI font. The brand families below are loaded on demand (styles/fonts.css)
-     and activate in Phase 1B by pointing components at --font-sans / -mono / -serif. */
-  --font-system: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-sans: "Instrument Sans", var(--font-system);
+  --font-sans: "Instrument Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
-  --font-serif: "Instrument Serif", "Iowan Old Style", Georgia, serif;
 
-  --text-2xs: 0.6875rem;
   --text-xs: 0.75rem;
-  --text-sm: 0.875rem;
+  --text-sm: 0.8125rem;
   --text-base: 0.9375rem;
   --text-md: 1.0625rem;
-  --text-lg: clamp(1rem, 2.5vw, 1.15rem);
-  --text-xl: clamp(1.45rem, 4vw, 2rem);
-  --text-2xl: clamp(2.2rem, 7vw, 3.65rem);
-  --text-display: clamp(3rem, 7.6vw, 8.75rem);
+  --text-lg: 1.25rem;
+  --text-xl: clamp(1.5rem, 3.6vw, 2rem);
+  --text-display: clamp(2.75rem, 7.4vw, 4.25rem);
 
-  --leading-tight: 1.02;
-  --leading-snug: 1.15;
-  --leading-normal: 1.5;
-  --leading-relaxed: 1.65;
+  --tracking-display: -0.035em;
+  --tracking-mono: -0.01em;
 
-  /* Display weight is optically compensated: lighter on dark backgrounds. */
-  --weight-display: 420;
-
-  --tracking-display: -0.055em;
-  --tracking-tight: -0.045em;
-  --tracking-mono: 0.02em;
-  --tracking-caps: 0.12em;
-
-  /* ---- Space (4px base) ---- */
+  /* ---- Space ---- */
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
@@ -95,106 +54,59 @@
   --space-7: 48px;
   --space-8: 64px;
   --space-9: 96px;
-  --space-10: 128px;
-  --space-11: 192px;
-  --space-section: clamp(72px, 12vw, 160px);
 
   /* ---- Layout ---- */
-  --container-prose: 700px;
-  --container-wide: 1200px;
-  --container-max: 1440px;
-  --gutter: clamp(16px, 4vw, 48px);
-  --grid-cell: 64px;
+  --container: 1000px;
+  --container-prose: 640px;
+  --gutter: clamp(20px, 5vw, 32px);
+  --header-height: 88px;
 
   /* ---- Shape ---- */
-  --radius-xs: 2px;
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
   --radius-pill: 999px;
-  --border-hairline: 1px;
-
-  --shadow-float: 0 16px 40px -16px rgb(0 0 0 / 50%);
 
   /* ---- Layers ---- */
-  --z-raised: 1;
   --z-header: 5;
   --z-toast: 10;
   --z-skip: 20;
 
-  /* ---- Motion ----
-     Mirrored for Framer Motion in src/lib/motion.js — keep both in sync. */
-  --duration-instant: 100ms;
-  --duration-fast: 180ms;
+  /* ---- Motion — mirrored in src/lib/motion.js ---- */
+  --duration-fast: 160ms;
   --duration-base: 240ms;
-  --duration-moderate: 320ms;
-  --duration-slow: 480ms;
-  --duration-page: 600ms;
-  --duration-slower: 800ms;
-
+  --duration-slow: 520ms;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
-  --ease-in: cubic-bezier(0.5, 0, 0.75, 0);
-
-  --stagger: 60ms;
-  --reveal-distance: 24px;
-  --parallax-depth-1: 0.04;
-  --parallax-depth-2: 0.08;
-  --parallax-depth-3: 0.14;
+  --stagger: 70ms;
 }
 
-:root[data-theme="light"] {
-  color-scheme: light;
+:root[data-theme="dark"] {
+  color-scheme: dark;
 
-  --color-bg: #f3f3f0;
-  --color-bg-sunken: #ecece7;
-  --color-surface: #fafaf8;
-  --color-surface-raised: #e8eae6;
+  /* ---- Color: dark (soft charcoal) ---- */
+  --color-bg: #1c1d1f;
+  --color-surface: #252629;
+  --color-surface-hover: #2d2e32;
+  --color-text: #e9e7e2;
+  --color-text-muted: #b0aea8;
+  --color-text-quiet: #8f8d88;
+  --color-accent: #7d95a9;
+  --color-accent-text: #9fb4c6;
+  --color-border: #2f3034;
+  --color-border-strong: #3d3e43;
+  --color-focus: #b7c7d4;
+  --color-selection: color-mix(in srgb, #7d95a9 38%, transparent);
 
-  --color-text: #161d25;
-  --color-text-muted: #4a5764;
-  --color-text-quiet: #5f6b77;
-
-  --color-accent: #718fa8;
-  --color-accent-text: #4e6c86;
-  --color-accent-hover: #3f5a72;
-  --color-accent-fill: #4e6c86; /* --color-on-accent on it: 5.5 */
-  --color-accent-subtle: color-mix(in srgb, #bccbd7 35%, transparent);
-  --color-on-accent: #ffffff;
-
-  --color-border: #dadcd8;
-  --color-border-strong: #c3c8c9;
-  --color-border-control: #77838e;
-  --color-focus: #3f5a72;
-
-  --color-grid-line: color-mix(in srgb, #718fa8 10%, transparent);
-  --color-placeholder: #e1e3df;
-  --color-selection: color-mix(in srgb, #bccbd7 60%, transparent);
-
-  --tone-clay: #a8705c;
-  --tone-steel: #4e6c86;
-
-  --color-standin-top: #e7e8e5;
-  --color-standin-bottom: #d3d8da;
-  --weight-display: 560;
-
-  --shadow-float: 0 12px 32px -16px rgb(22 29 37 / 14%);
+  --ink-near: #dcd9d3;
+  --ink-far: #737980;
+  --ink-sky: #9fb4c6;
 }
 
 @media (prefers-reduced-motion: reduce) {
   :root {
-    --duration-instant: 0ms;
     --duration-fast: 0ms;
     --duration-base: 0ms;
-    --duration-moderate: 0ms;
     --duration-slow: 0ms;
-    --duration-page: 0ms;
-    --duration-slower: 0ms;
     --stagger: 0ms;
-    --reveal-distance: 0px;
-    --parallax-depth-1: 0;
-    --parallax-depth-2: 0;
-    --parallax-depth-3: 0;
   }
 }

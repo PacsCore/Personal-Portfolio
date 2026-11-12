@@ -1,11 +1,14 @@
 import content from '../../data/content.js'
-import SocialLinks from '../ui/SocialLinks.jsx'
 
-function SiteFooter({ onToast }) {
+function SiteFooter() {
   return (
     <footer className="site-footer">
-      <SocialLinks onToast={onToast} />
-      <p>© {new Date().getFullYear()} {content.name}. {content.copyright}</p>
+      <p>
+        © {new Date().getFullYear()} {content.name}
+      </p>
+      <p aria-hidden="true" className="site-footer-mark">
+        · ˚ ✦ ·
+      </p>
     </footer>
   )
 }

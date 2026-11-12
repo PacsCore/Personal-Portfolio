@@ -1,24 +1,36 @@
 import { MotionConfig } from 'framer-motion'
-import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { Navigate, RouterProvider, createBrowserRouter, useParams } from 'react-router-dom'
 import SiteLayout from './components/layout/SiteLayout.jsx'
-import content from './data/content.js'
+import content, { getProject } from './data/content.js'
 import AboutPage from './pages/AboutPage.jsx'
 import ContactPage from './pages/ContactPage.jsx'
 import HomePage from './pages/HomePage.jsx'
-import ProjectsPage from './pages/ProjectsPage.jsx'
+import ProjectPage from './pages/ProjectPage.jsx'
+import WorkPage from './pages/WorkPage.jsx'
 import './styles/tokens.css'
 import './styles/fonts.css'
 import './App.css'
+
+function LegacyProjectRedirect() {
+  const { slug } = useParams()
+  return <Navigate to={`/work/${slug}`} replace />
+}
 
 const router = createBrowserRouter([
   {
     element: <SiteLayout />,
     children: [
-      // The homepage ends with its own colophon instead of the site footer.
       { path: '/', element: <HomePage />, handle: { footer: false } },
-      { path: '/about', element: <AboutPage />, handle: { title: content.sectionTitles.about } },
-      { path: '/projects', element: <ProjectsPage />, handle: { title: content.sectionTitles.projects } },
-      { path: '/contact', element: <ContactPage />, handle: { title: content.sectionTitles.contact } },
+      { path: '/about', element: <AboutPage />, handle: { title: content.about.title } },
+      { path: '/work', element: <WorkPage />, handle: { title: content.work.title } },
+      {
+        path: '/work/:slug',
+        element: <ProjectPage />,
+        handle: { title: (params) => getProject(params.slug)?.title },
+      },
+      { path: '/contact', element: <ContactPage />, handle: { title: content.contact.title } },
+      { path: '/projects', element: <Navigate to="/work" replace /> },
+      { path: '/projects/:slug', element: <LegacyProjectRedirect /> },
       { path: '*', element: <Navigate to="/" replace /> },
     ],
   },

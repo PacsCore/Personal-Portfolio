@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useMatches } from 'react-router-dom'
 import content from '../../data/content.js'
 import useTheme from '../../hooks/useTheme.js'
-import Toast from '../ui/Toast.jsx'
 import PageTransition from './PageTransition.jsx'
 import SiteFooter from './SiteFooter.jsx'
 import SiteHeader from './SiteHeader.jsx'
@@ -24,21 +23,15 @@ function SkipLink() {
 
 function SiteLayout() {
   const { theme, toggleTheme } = useTheme()
-  const [toast, setToast] = useState('')
   const matches = useMatches()
-  const pageTitle = matches.at(-1)?.handle?.title
-  const showFooter = matches.at(-1)?.handle?.footer !== false
+  const match = matches.at(-1)
+  const title = match?.handle?.title
+  const pageTitle = typeof title === 'function' ? title(match.params) : title
+  const showFooter = match?.handle?.footer !== false
 
   useEffect(() => {
-    document.title = pageTitle ? `${pageTitle} | ${content.name}` : `${content.name} | Portfolio`
+    document.title = pageTitle ? `${pageTitle} — ${content.name}` : content.name
   }, [pageTitle])
-
-  useEffect(() => {
-    if (!toast) return undefined
-
-    const timeoutId = window.setTimeout(() => setToast(''), 1800)
-    return () => window.clearTimeout(timeoutId)
-  }, [toast])
 
   return (
     <div className="site-shell">
@@ -49,8 +42,7 @@ function SiteLayout() {
         <PageTransition />
       </main>
 
-      {showFooter && <SiteFooter onToast={setToast} />}
-      <Toast message={toast} />
+      {showFooter && <SiteFooter />}
     </div>
   )
 }

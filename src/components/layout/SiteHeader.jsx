@@ -1,37 +1,41 @@
 import { motion } from 'framer-motion'
 import { NavLink } from 'react-router-dom'
 import content from '../../data/content.js'
-import { pageTransition } from '../../lib/motion.js'
+import { navIndicatorTransition } from '../../lib/motion.js'
 import ThemeToggle from '../ui/ThemeToggle.jsx'
 
 function SiteHeader({ theme, onToggleTheme }) {
   return (
     <header className="site-header">
       <div className="site-header-inner">
-        <NavLink className="site-brand" to="/" end>
-          <span className="site-brand-mark" aria-hidden="true" />
-          <span>{content.shortName}</span>
+        <NavLink className="site-brand" to="/" end aria-label={`${content.name} — home`}>
+          <img
+            className="site-avatar"
+            src={content.avatar.src}
+            alt=""
+            width="36"
+            height="36"
+            decoding="async"
+          />
+          <span className="site-brand-name">{content.shortName}</span>
         </NavLink>
 
         <nav className="site-nav" aria-label={content.ui.navigationLabel}>
           <ul className="site-nav-list">
             {content.navigation.map((item) => (
-              <li className="site-nav-item" key={item.to}>
-                <NavLink
-                  className={({ isActive }) => `nav-link${isActive ? ' is-active' : ''}`}
-                  end={item.end}
-                  to={item.to}
-                >
+              <li key={item.to}>
+                <NavLink className="nav-link" end={item.end} to={item.to}>
                   {({ isActive }) => (
                     <>
-                      {item.label}
                       {isActive && (
                         <motion.span
-                          className="nav-active-indicator"
-                          layoutId="active-nav-indicator"
-                          transition={pageTransition}
+                          className="nav-indicator"
+                          layoutId="nav-indicator"
+                          transition={navIndicatorTransition}
+                          aria-hidden="true"
                         />
                       )}
+                      <span className="nav-label">{item.label}</span>
                     </>
                   )}
                 </NavLink>
