@@ -38,7 +38,7 @@ function HomePage() {
               <ParallaxImage
                 image={image}
                 progress={scrollYProgress}
-                speed={index % 2 === 0 ? -18 : 20}
+                speed={index % 2 === 0 ? '-8%' : '8%'}
               />
             </StaggerItem>
           ))}
