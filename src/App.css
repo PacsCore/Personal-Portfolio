@@ -347,7 +347,8 @@ h1:focus {
     flex-direction: column;
     flex: 1;
     justify-content: center;
-    padding: var(--space-6) 0 8vh;
+    /* +28px offsets the compact footer so the centered hero keeps its position. */
+    padding: var(--space-6) 0 calc(8vh + 28px);
   }
 }
 
@@ -1104,7 +1105,7 @@ h1:focus {
   flex-wrap: wrap;
   justify-content: space-between;
   gap: var(--space-1) var(--space-5);
-  padding: var(--space-5) 0 var(--space-6);
+  padding: var(--space-3) 0 max(var(--space-4), env(safe-area-inset-bottom));
   border-top: 1px solid var(--color-border);
   color: var(--color-text-quiet);
   font-size: var(--text-xs);
