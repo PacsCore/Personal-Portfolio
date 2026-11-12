@@ -1,17 +1,15 @@
 import { useRef } from 'react'
-import { motion, useReducedMotionConfig, useScroll, useTransform } from 'framer-motion'
+import { useScroll } from 'framer-motion'
 import ParallaxImage from '../components/ParallaxImage.jsx'
 import { Reveal, StaggerGroup, StaggerItem } from '../components/Reveal.jsx'
 import content from '../data/content.js'
 
 function HomePage() {
   const heroRef = useRef(null)
-  const reduceMotion = useReducedMotionConfig()
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ['start start', 'end start'],
   })
-  const heroY = useTransform(scrollYProgress, [0, 1], [0, reduceMotion ? 0 : 38])
 
   return (
     <div className="home-page">
@@ -25,9 +23,14 @@ function HomePage() {
           <p className="home-intro-text">{content.intro}</p>
         </Reveal>
 
-        <motion.div className="hero-image-frame" style={{ y: heroY }}>
-          <img src={content.images.hero.src} alt={content.images.hero.alt} />
-        </motion.div>
+        <div className="hero-image-frame">
+          <ParallaxImage
+            image={content.images.hero}
+            progress={scrollYProgress}
+            speed={38}
+            loading="eager"
+          />
+        </div>
 
         <StaggerGroup className="image-gallery" role="group" aria-label={content.ui.galleryLabel}>
           {content.images.gallery.map((image, index) => (
