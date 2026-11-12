@@ -1,29 +1,31 @@
 import HeroCodeWindow from './HeroCodeWindow.jsx'
 
-// Right-hand composition: outline circle, steel block, framed landscape and the code window.
-function HeroVisual({ image, location, code }) {
+// Framed photograph with its offset "second ink" plate, a faint contour overlay,
+// two registration marks and a caption, plus the code window.
+// Without `image.src` the plate shows a neutral tonal stand-in.
+function HeroVisual({ image, caption, code }) {
   return (
     <div className="hero-visual">
-      <div className="hero-art" aria-hidden="true">
-        <span className="hero-circle" />
-        <span className="hero-block" />
-        <div className="hero-photo">
-          <img
-            src={image.src}
-            alt=""
-            loading="eager"
-            decoding="async"
-            style={{ objectPosition: image.framePosition }}
-          />
+      <figure className="hero-frame">
+        <figcaption className="hero-caption">{caption}</figcaption>
+        <div className="hero-plate">
+          <span className="hero-ink" aria-hidden="true" />
+          <div className="hero-photo" aria-hidden={image.src ? undefined : 'true'}>
+            {image.src && (
+              <img
+                src={image.src}
+                alt={image.alt}
+                loading="eager"
+                decoding="async"
+                style={{ objectPosition: image.position }}
+              />
+            )}
+          </div>
+          <span className="hero-contours" aria-hidden="true" />
+          <span className="hero-mark hero-mark-start" aria-hidden="true" />
+          <span className="hero-mark hero-mark-end" aria-hidden="true" />
         </div>
-        <span className="hero-crosshair hero-crosshair-photo" />
-      </div>
-
-      <p className="hero-location">
-        <span aria-hidden="true">{'{ '}</span>
-        {location}
-        <span aria-hidden="true">{' }'}</span>
-      </p>
+      </figure>
 
       <HeroCodeWindow {...code} />
     </div>

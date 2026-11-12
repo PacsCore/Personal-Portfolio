@@ -35,10 +35,9 @@ function HeroSection() {
           </div>
         </div>
 
-        <HeroVisual image={hero.image} location={hero.location} code={hero.code} />
+        <HeroVisual image={hero.image} caption={hero.caption} code={hero.code} />
 
         <p className="hero-tags">
-          <span className="hero-crosshair" aria-hidden="true" />
           <span className="visually-hidden">{hero.tagsLabel}: </span>
           {hero.tags.map((tag, index) => (
             <span key={tag}>
@@ -48,10 +47,6 @@ function HeroSection() {
             </span>
           ))}
         </p>
-      </div>
-
-      <div className="hero-band" aria-hidden="true">
-        <img src={hero.image.src} alt="" decoding="async" style={{ objectPosition: hero.image.bandPosition }} />
       </div>
     </section>
   )

@@ -1,16 +1,25 @@
 /*
- * Home hero — editorial composition.
- * Stacked by default (mobile first); two columns from 1024px.
- * Brand fonts are scoped to the hero and the site header for now.
+ * Home hero — editorial composition (M1: cohesion pass).
+ *
+ * Alignment system (desktop):
+ *   - Name, "01" marker and photo plate share one top line: the cap height of
+ *     "Enrique" (text-box trimming removes the half-leading above the caps).
+ *   - The visual column stretches to the copy's height, so the code window's
+ *     bottom edge sits on the bottom of the link row.
+ *   - The plate's right edge and the code window's left edge sit on grid lines.
+ * Stacked below 1024px. Brand fonts are scoped to the hero and site header.
  */
 
 .hero {
   --hero-title-weight: 420;
-  --hero-sky-top: #1b232c;
-  --hero-sky-bottom: #2b343e;
-  --hero-block: color-mix(in srgb, var(--color-accent) 58%, var(--color-bg));
-  --hero-band-blend: screen;
-  --hero-band-opacity: 0.55;
+  --hero-photo-top: #1e2731;
+  --hero-photo-bottom: #2a3541;
+  --hero-ink: color-mix(in srgb, var(--color-accent) 46%, var(--color-bg));
+  --hero-ink-offset: 12px;
+  --hero-tint: 0.1;
+  --hero-grain-opacity: 0.14;
+  --hero-contour-opacity: 0.26;
+  --hero-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 
   position: relative;
   isolation: isolate;
@@ -19,42 +28,45 @@
 
 :root[data-theme="light"] .hero {
   --hero-title-weight: 560;
-  --hero-sky-top: #dfe2e0;
-  --hero-sky-bottom: #efeeea;
-  --hero-block: color-mix(in srgb, var(--color-accent) 82%, var(--color-bg));
-  --hero-band-blend: multiply;
-  --hero-band-opacity: 0.42;
+  --hero-photo-top: #e7e8e5;
+  --hero-photo-bottom: #d3d8da;
+  --hero-ink: color-mix(in srgb, var(--color-accent) 72%, var(--color-bg));
+  --hero-tint: 0.14;
+  --hero-grain-opacity: 0.2;
+  --hero-contour-opacity: 0.3;
 }
 
 .hero-inner {
   position: relative;
-  z-index: 1;
   width: min(var(--container-max), calc(100% - 2 * var(--gutter)));
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: var(--space-6);
   margin: 0 auto;
-  padding: clamp(40px, 8vw, 72px) 0 var(--space-5);
+  padding: clamp(40px, 8vw, 72px) 0 var(--space-7);
 }
 
 /* ---- Copy ---- */
 
 .hero-index {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
   margin: 0;
   color: var(--color-text-quiet);
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   font-variant-numeric: tabular-nums;
+  line-height: 1;
+  text-box: trim-both cap alphabetic;
+  white-space: nowrap;
 }
 
 .hero-index::after {
-  width: 36px;
+  width: clamp(20px, 2.5vw, 36px);
   height: 1px;
+  display: inline-block;
+  margin-left: var(--space-3);
   background: var(--color-border-strong);
   content: "";
+  vertical-align: middle;
 }
 
 .hero-copy {
@@ -62,12 +74,13 @@
 }
 
 .hero-title {
-  margin: 0 0 clamp(14px, 1.6vw, 24px);
+  margin: 0 0 clamp(20px, 2.2vw, 32px);
   color: var(--color-text);
   font-size: clamp(3rem, 14.5vw, 4.75rem);
   font-weight: var(--hero-title-weight);
   letter-spacing: var(--tracking-tight);
   line-height: 0.94;
+  text-box: trim-both cap alphabetic;
 }
 
 .hero-title span {
@@ -108,53 +121,46 @@
   font-weight: 500;
 }
 
+/* Links: typographic, not buttons — the name stays the dominant element. */
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-4) var(--space-6);
+  gap: var(--space-4) var(--space-7);
   margin-top: clamp(28px, 3.4vw, 44px);
   font-family: var(--font-mono);
   font-size: var(--text-sm);
 }
 
-.hero-cta {
-  min-height: 48px;
+.hero-cta,
+.hero-link {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  padding: 0 var(--space-5);
-  border-radius: var(--radius-xs);
-  background: var(--color-accent-fill);
-  color: var(--color-on-accent);
-  font-weight: 500;
-  transition: background-color var(--duration-fast) ease;
-}
-
-.hero-cta:hover {
-  background: var(--color-accent-hover);
-}
-
-.hero-link {
-  min-height: 44px;
-  display: inline-flex;
-  align-items: center;
+  padding: 10px 0 7px;
+  border-bottom: 1px solid var(--color-border-control);
   color: var(--color-text);
-  text-decoration: underline;
-  text-decoration-color: var(--color-border-control);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 7px;
-  transition: color var(--duration-fast) ease, text-decoration-color var(--duration-fast) ease;
+  transition: color var(--duration-fast) ease, border-color var(--duration-fast) ease;
 }
 
-.hero-link:hover {
+.hero-cta {
+  border-bottom-color: var(--color-accent);
+  font-weight: 500;
+}
+
+.hero-cta svg {
   color: var(--color-accent-text);
-  text-decoration-color: currentColor;
+}
+
+.hero-cta:hover,
+.hero-link:hover {
+  border-bottom-color: var(--color-accent-text);
+  color: var(--color-accent-text);
 }
 
 /* ---- Meta ---- */
 
-.hero-location,
+.hero-caption,
 .hero-tags {
   margin: 0;
   color: var(--color-text-quiet);
@@ -177,71 +183,45 @@
   color: var(--color-text-quiet);
 }
 
-.hero-crosshair {
-  position: relative;
-  width: 26px;
-  height: 26px;
-  flex: 0 0 auto;
-}
-
-.hero-crosshair::before,
-.hero-crosshair::after {
-  position: absolute;
-  background: var(--color-border-strong);
-  content: "";
-}
-
-.hero-crosshair::before {
-  top: 50%;
-  right: 0;
-  left: 0;
-  height: 1px;
-}
-
-.hero-crosshair::after {
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  width: 1px;
-}
-
-/* ---- Visual (stacked layout) ---- */
+/* ---- Visual: plate (stacked layout first) ---- */
 
 .hero-visual {
   position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  justify-items: start;
 }
 
-.hero-art {
+.hero-frame {
+  margin: 0;
+}
+
+.hero-caption {
+  margin-bottom: var(--space-3);
+  text-align: right;
+}
+
+.hero-plate {
   position: relative;
-  width: 100%;
-  aspect-ratio: 4 / 3;
+  /* room for the ink offset so nothing leaves the container */
+  margin: 0 0 var(--hero-ink-offset) var(--hero-ink-offset);
+  aspect-ratio: 4 / 3.2;
 }
 
-.hero-circle {
-  display: none;
-}
-
-.hero-block {
+.hero-ink,
+.hero-photo {
   position: absolute;
-  top: 18%;
-  bottom: -10%;
-  left: 0;
-  width: 46%;
-  background: var(--hero-block);
+  inset: 0;
+}
+
+.hero-ink {
+  background: var(--hero-ink);
+  transform: translate(calc(-1 * var(--hero-ink-offset)), var(--hero-ink-offset));
 }
 
 .hero-photo {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 9%;
   overflow: hidden;
   border: 1px solid var(--color-border);
-  background: linear-gradient(var(--hero-sky-top), var(--hero-sky-bottom));
+  background: linear-gradient(var(--hero-photo-top), var(--hero-photo-bottom));
 }
 
 .hero-photo img {
@@ -249,17 +229,84 @@
   height: 100%;
   display: block;
   object-fit: cover;
-  filter: grayscale(1);
+  filter: grayscale(1) contrast(1.05);
 }
 
-.hero-crosshair-photo {
-  display: none;
+/* Faint steel tint: the photograph reads as part of a two-ink print. */
+.hero-photo::before,
+.hero-photo::after,
+.hero-ink::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  pointer-events: none;
 }
 
-.hero-location {
-  order: -1;
-  justify-self: end;
-  margin-bottom: var(--space-3);
+.hero-photo::before {
+  z-index: 1;
+  background: var(--color-accent);
+  mix-blend-mode: color;
+  opacity: var(--hero-tint);
+}
+
+.hero-photo::after,
+.hero-ink::after {
+  z-index: 1;
+  background: var(--hero-grain);
+  mix-blend-mode: soft-light;
+  opacity: var(--hero-grain-opacity);
+}
+
+/* One contour field, very faint, drifting off the plate's lower half. */
+.hero-contours {
+  position: absolute;
+  top: 38%;
+  right: 0;
+  bottom: -14%;
+  left: -18%;
+  background: var(--color-accent);
+  opacity: var(--hero-contour-opacity);
+  pointer-events: none;
+  -webkit-mask-image: url("/images/hero/contours.svg"), linear-gradient(to right, transparent, #000 45%);
+  -webkit-mask-composite: source-in;
+  -webkit-mask-position: right top, 0 0;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: cover, 100% 100%;
+  mask-image: url("/images/hero/contours.svg"), linear-gradient(to right, transparent, #000 45%);
+  mask-composite: intersect;
+  mask-position: right top, 0 0;
+  mask-repeat: no-repeat;
+  mask-size: cover, 100% 100%;
+}
+
+/* Registration marks centred on two opposite corners of the photograph. */
+.hero-mark {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  color: var(--color-border-strong);
+  background:
+    linear-gradient(currentColor, currentColor) center / 1px 100% no-repeat,
+    linear-gradient(currentColor, currentColor) center / 100% 1px no-repeat;
+  pointer-events: none;
+}
+
+.hero-mark::before {
+  position: absolute;
+  inset: 5px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  content: "";
+}
+
+.hero-mark-start {
+  top: -11px;
+  left: -11px;
+}
+
+.hero-mark-end {
+  right: -11px;
+  bottom: -11px;
 }
 
 /* ---- Code window ---- */
@@ -267,8 +314,8 @@
 .hero-code {
   position: relative;
   z-index: 2;
-  width: min(100%, 360px);
-  margin: -44px 0 0;
+  width: min(100%, 340px);
+  margin: -40px 0 0;
   overflow: hidden;
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-md);
@@ -278,7 +325,7 @@
 }
 
 .hero-code-bar {
-  height: 34px;
+  height: 32px;
   display: flex;
   align-items: center;
   gap: var(--space-4);
@@ -292,8 +339,8 @@
 }
 
 .hero-code-dots span {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: var(--color-border-strong);
 }
@@ -348,31 +395,13 @@
   color: var(--color-text-quiet);
 }
 
-/* ---- Atmospheric band ---- */
-
-.hero-band {
-  position: relative;
-  z-index: 0;
-  /* Sits below the tags, never behind text. */
-  height: clamp(110px, 22vw, 170px);
-  pointer-events: none;
-  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 60%);
-  mask-image: linear-gradient(to bottom, transparent, #000 60%);
-}
-
-.hero-band img {
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover;
-  filter: grayscale(1);
-  mix-blend-mode: var(--hero-band-blend);
-  opacity: var(--hero-band-opacity);
-}
-
 /* ---- Tablet: stacked, visual narrower and set right ---- */
 
 @media (min-width: 768px) {
+  .hero {
+    --hero-ink-offset: 14px;
+  }
+
   .hero-title {
     font-size: clamp(4.75rem, 11vw, 6.75rem);
   }
@@ -384,37 +413,35 @@
 
   .hero-code {
     width: 340px;
-    margin-left: -6%;
-  }
-
-  .hero-code-body {
-    font-size: 11.5px;
+    margin-top: -56px;
   }
 }
 
-/* ---- Desktop: two-column editorial composition ---- */
+/* ---- Desktop: two-column composition on one shared top line ---- */
 
 @media (min-width: 1024px) {
+  .hero {
+    --hero-ink-offset: var(--space-4);
+  }
+
   .hero-inner {
-    min-height: min(calc(100svh - 69px), 940px);
+    min-height: min(calc(100svh - 69px), 900px);
     grid-template-columns: repeat(12, minmax(0, 1fr));
-    grid-template-rows: minmax(0, 1fr) auto;
+    grid-template-rows: auto 1fr;
     column-gap: var(--space-5);
-    row-gap: var(--space-6);
-    padding: clamp(48px, 7vh, 88px) 0 var(--space-7);
+    row-gap: var(--space-7);
+    padding: clamp(72px, 12vh, 128px) 0 var(--space-7);
   }
 
   .hero-index {
     grid-row: 1;
     grid-column: 1;
     align-self: start;
-    margin-top: calc(var(--text-display) * 0.42);
   }
 
   .hero-copy {
     grid-row: 1;
     grid-column: 2 / 8;
-    align-self: center;
   }
 
   .hero-title {
@@ -424,91 +451,46 @@
 
   .hero-visual {
     width: auto;
-    justify-self: stretch;
     grid-row: 1;
     grid-column: 8 / 13;
-    align-self: center;
+    align-self: stretch;
+    justify-self: stretch;
     display: block;
-    aspect-ratio: 1 / 1.02;
   }
 
-  .hero-art {
-    position: absolute;
-    inset: 0;
-    aspect-ratio: auto;
-  }
-
-  .hero-circle {
+  .hero-frame {
     position: absolute;
     top: 0;
-    left: -8%;
-    width: 74%;
-    aspect-ratio: 1;
-    display: block;
-    border: 1px solid var(--color-border-strong);
-    border-radius: 50%;
-  }
-
-  .hero-block {
-    top: 34%;
-    bottom: 10%;
-    left: 10%;
-    width: 50%;
-  }
-
-  .hero-photo {
-    top: 12%;
     right: 0;
-    bottom: auto;
-    left: auto;
-    width: 74%;
-    aspect-ratio: 4 / 3.3;
+    width: 80%;
   }
 
-  .hero-crosshair-photo {
+  .hero-caption {
     position: absolute;
-    top: calc(12% - 13px);
-    right: -13px;
-    display: block;
+    right: 0;
+    bottom: calc(100% + var(--space-3));
+    margin: 0;
   }
 
-  .hero-location {
-    position: absolute;
-    top: calc(12% - 30px);
-    right: 28px;
+  .hero-plate {
     margin: 0;
   }
 
   .hero-code {
     position: absolute;
-    bottom: 4%;
+    bottom: 0;
     left: 0;
-    width: clamp(300px, 25vw, 360px);
+    width: clamp(290px, 24vw, 350px);
     margin: 0;
   }
 
   .hero-code-body {
-    font-size: clamp(11px, 0.85vw, 12.5px);
+    font-size: clamp(11px, 0.82vw, 12px);
   }
 
   .hero-tags {
     grid-row: 2;
-    grid-column: 1 / 8;
-  }
-
-  .hero-band {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    height: clamp(160px, 24%, 250px);
-    -webkit-mask-image:
-      linear-gradient(to bottom, transparent, #000 60%),
-      linear-gradient(to right, transparent 40%, #000 80%);
-    -webkit-mask-composite: source-in;
-    mask-image:
-      linear-gradient(to bottom, transparent, #000 60%),
-      linear-gradient(to right, transparent 40%, #000 80%);
-    mask-composite: intersect;
+    grid-column: 2 / 8;
+    align-self: end;
   }
 }

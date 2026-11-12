@@ -19,25 +19,25 @@ const content = {
       primary: { label: 'View Projects', to: '/projects' },
       secondary: { label: 'About Me', to: '/about' },
     },
-    location: 'Vienna, AT',
+    caption: 'Based in Vienna, AT',
     tags: ['Full-stack', 'AI', 'Design'],
     tagsLabel: 'Disciplines',
     code: {
       fileName: 'profile.ts',
       exportName: 'profile',
+      timeZone: 'Europe/Vienna',
       value: {
-        name: 'Enrique Achacoso',
         role: 'Software Engineer',
         focus: ['Engineering', 'Design'],
         location: 'Vienna, AT',
       },
     },
-    // One landscape serves both the framed image and the atmospheric band.
-    // To use a photograph, replace `src` and tune the two object-positions.
+    // EDIT ME: hero photograph. While `src` is null the frame shows a neutral
+    // stand-in. Add the file under public/images/hero/ and describe it in `alt`.
     image: {
-      src: '/images/hero/landscape.svg',
-      framePosition: '70% 18%',
-      bandPosition: '50% 88%',
+      src: null,
+      alt: '',
+      position: '50% 50%',
     },
   },
   placeholders: {

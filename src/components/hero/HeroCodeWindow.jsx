@@ -1,5 +1,8 @@
+import useLocalTime from '../../hooks/useLocalTime.js'
+
 // Small IDE-style window. Decorative: it restates the hero copy, so it is hidden
-// from assistive technology. Lines are generated from a plain object in content.js.
+// from assistive technology. Lines are generated from a plain object in content.js,
+// plus a live `localTime` entry for the given time zone.
 
 function formatValue(value) {
   if (Array.isArray(value)) {
@@ -15,12 +18,15 @@ function formatValue(value) {
   return <span className="tok-str">&quot;{value}&quot;</span>
 }
 
-function HeroCodeWindow({ fileName, exportName, value }) {
+function HeroCodeWindow({ fileName, exportName, value, timeZone }) {
+  const localTime = useLocalTime(timeZone)
+  const entries = { ...value, localTime }
+
   const lines = [
     <>
       <span className="tok-kw">export const</span> {exportName} <span className="tok-punc">= {'{'}</span>
     </>,
-    ...Object.entries(value).map(([key, entry]) => (
+    ...Object.entries(entries).map(([key, entry]) => (
       <>
         {'  '}
         <span className="tok-key">{key}</span>
