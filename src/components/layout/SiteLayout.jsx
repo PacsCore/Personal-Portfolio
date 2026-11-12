@@ -27,7 +27,6 @@ function SiteLayout() {
   const match = matches.at(-1)
   const title = match?.handle?.title
   const pageTitle = typeof title === 'function' ? title(match.params) : title
-  const showFooter = match?.handle?.footer !== false
 
   useEffect(() => {
     document.title = pageTitle ? `${pageTitle} — ${content.name}` : content.name
@@ -42,7 +41,7 @@ function SiteLayout() {
         <PageTransition />
       </main>
 
-      {showFooter && <SiteFooter />}
+      <SiteFooter />
     </div>
   )
 }

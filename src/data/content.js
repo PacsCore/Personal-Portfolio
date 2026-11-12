@@ -75,6 +75,10 @@ const content = {
     text: "Whether it's a project, an idea, or just a hello — I'd be glad to hear from you.",
   },
 
+  footer: {
+    note: 'Still a work in progress.',
+  },
+
   ui: {
     navigationLabel: 'Main navigation',
     skipToContent: 'Skip to content',

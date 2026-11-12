@@ -110,15 +110,24 @@ h1:focus {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  min-height: 100svh;
+  min-height: 100dvh;
 }
 
+/* main grows to push the footer down; the page inside can grow to fill main. */
 .page-main {
+  display: flex;
+  flex-direction: column;
   flex: 1;
   width: 100%;
   max-width: calc(var(--container) + var(--gutter) * 2);
   margin: 0 auto;
   padding: 0 var(--gutter);
+}
+
+.page-transition {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 /* ============ Header ============ */
@@ -336,9 +345,9 @@ h1:focus {
   .home {
     display: flex;
     flex-direction: column;
+    flex: 1;
     justify-content: center;
-    min-height: calc(100svh - 110px);
-    padding: var(--space-6) 0 12vh;
+    padding: var(--space-6) 0 8vh;
   }
 }
 
@@ -1084,20 +1093,27 @@ h1:focus {
 /* ============ Footer ============ */
 
 .site-footer {
-  display: flex;
-  justify-content: space-between;
-  gap: var(--space-4);
   width: 100%;
   max-width: calc(var(--container) + var(--gutter) * 2);
   margin: 0 auto;
-  padding: var(--space-6) var(--gutter) var(--space-7);
+  padding: 0 var(--gutter);
+}
+
+.site-footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-1) var(--space-5);
+  padding: var(--space-5) 0 var(--space-6);
+  border-top: 1px solid var(--color-border);
   color: var(--color-text-quiet);
   font-size: var(--text-xs);
 }
 
-.site-footer-mark {
-  color: var(--ink-sky);
-  letter-spacing: 0.2em;
+@media (max-width: 480px) {
+  .site-footer-inner {
+    flex-direction: column;
+  }
 }
 
 /* ============ Reduced motion ============ */

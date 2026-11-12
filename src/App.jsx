@@ -20,7 +20,7 @@ const router = createBrowserRouter([
   {
     element: <SiteLayout />,
     children: [
-      { path: '/', element: <HomePage />, handle: { footer: false } },
+      { path: '/', element: <HomePage /> },
       { path: '/about', element: <AboutPage />, handle: { title: content.about.title } },
       { path: '/work', element: <WorkPage />, handle: { title: content.work.title } },
       {
