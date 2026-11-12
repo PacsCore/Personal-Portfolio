@@ -25,7 +25,7 @@ const content = {
   socials: {
     github: { label: 'GitHub', handle: '@PacsCore', href: 'https://github.com/PacsCore' },
     x: { label: 'X', handle: '@PacsCore', href: 'https://x.com/PacsCore' },
-    email: { label: 'Email', address: null }, // EDIT ME: your verified address
+    email: { label: 'Email', address: 'achacoso.enrique@gmail.com' },
   },
 
   about: {
