@@ -10,6 +10,7 @@ const content = {
   },
   ui: {
     navigationLabel: 'Main navigation',
+    skipToContent: 'Skip to content',
     galleryLabel: 'Image gallery',
     collageLabel: 'Three image placeholders',
     socialLinksLabel: 'Social links',
