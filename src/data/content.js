@@ -1,10 +1,45 @@
 // EDIT ME: Replace the placeholder copy below with your own text.
 const content = {
-  name: 'Your Name',
-  greeting: "Hi, I'm",
-  tagline: 'Your tagline here',
+  name: 'Enrique Achacoso',
+  shortName: 'E. Achacoso',
   intro: 'Lorem ipsum…',
   aboutText: 'Lorem ipsum…',
+  hero: {
+    firstName: 'Enrique',
+    lastName: 'Achacoso',
+    index: '01',
+    role: 'Software Engineer & Creative Developer',
+    // EDIT ME: temporary intro. `emphasis` is set in the primary text color.
+    intro: {
+      lead: 'I build digital experiences at ',
+      emphasis: 'the intersection of engineering, design',
+      tail: ' and everyday curiosity.',
+    },
+    actions: {
+      primary: { label: 'View Projects', to: '/projects' },
+      secondary: { label: 'About Me', to: '/about' },
+    },
+    location: 'Vienna, AT',
+    tags: ['Full-stack', 'AI', 'Design'],
+    tagsLabel: 'Disciplines',
+    code: {
+      fileName: 'profile.ts',
+      exportName: 'profile',
+      value: {
+        name: 'Enrique Achacoso',
+        role: 'Software Engineer',
+        focus: ['Engineering', 'Design'],
+        location: 'Vienna, AT',
+      },
+    },
+    // One landscape serves both the framed image and the atmospheric band.
+    // To use a photograph, replace `src` and tune the two object-positions.
+    image: {
+      src: '/images/hero/landscape.svg',
+      framePosition: '70% 18%',
+      bandPosition: '50% 88%',
+    },
+  },
   placeholders: {
     email: 'your-email@example.com',
   },
@@ -21,7 +56,6 @@ const content = {
     themeToLight: 'Switch to light theme',
     themeToDark: 'Switch to dark theme',
     pageLabels: {
-      home: 'Portfolio',
       about: '01 / About',
       timeline: '02 / Timeline',
       work: '03 / Work',

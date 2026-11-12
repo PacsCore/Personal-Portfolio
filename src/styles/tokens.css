@@ -32,6 +32,7 @@
   --color-accent: #718fa8;
   --color-accent-text: #8da8be;
   --color-accent-hover: #bccbd7;
+  --color-accent-fill: #8da8be; /* solid buttons; --color-on-accent on it: 7.5 */
   --color-accent-subtle: color-mix(in srgb, #718fa8 14%, transparent);
   --color-on-accent: #0e141b;
   --color-secondary: #bccbd7;
@@ -64,7 +65,7 @@
   --text-lg: clamp(1rem, 2.5vw, 1.15rem);
   --text-xl: clamp(1.45rem, 4vw, 2rem);
   --text-2xl: clamp(2.2rem, 7vw, 3.65rem);
-  --text-display: clamp(3.5rem, 11vw, 9.5rem);
+  --text-display: clamp(3rem, 7.6vw, 8.75rem);
 
   --leading-tight: 1.02;
   --leading-snug: 1.15;
@@ -150,6 +151,7 @@
   --color-accent: #718fa8;
   --color-accent-text: #4e6c86;
   --color-accent-hover: #3f5a72;
+  --color-accent-fill: #4e6c86; /* --color-on-accent on it: 5.5 */
   --color-accent-subtle: color-mix(in srgb, #bccbd7 35%, transparent);
   --color-on-accent: #ffffff;
 

@@ -7,35 +7,41 @@ import ThemeToggle from '../ui/ThemeToggle.jsx'
 function SiteHeader({ theme, onToggleTheme }) {
   return (
     <header className="site-header">
-      <nav className="nav-pill" aria-label={content.ui.navigationLabel}>
-        <NavLink className="site-name" to="/" end>
-          {content.name}
+      <div className="site-header-inner">
+        <NavLink className="site-brand" to="/" end>
+          <span className="site-brand-mark" aria-hidden="true" />
+          <span>{content.shortName}</span>
         </NavLink>
-        <div className="nav-links">
-          {content.navigation.map((item) => (
-            <NavLink
-              className={({ isActive }) => `nav-link${isActive ? ' is-active' : ''}`}
-              end={item.end}
-              key={item.to}
-              to={item.to}
-            >
-              {({ isActive }) => (
-                <>
-                  {isActive && (
-                    <motion.span
-                      className="nav-active-indicator"
-                      layoutId="active-nav-pill"
-                      transition={pageTransition}
-                    />
+
+        <nav className="site-nav" aria-label={content.ui.navigationLabel}>
+          <ul className="site-nav-list">
+            {content.navigation.map((item) => (
+              <li className="site-nav-item" key={item.to}>
+                <NavLink
+                  className={({ isActive }) => `nav-link${isActive ? ' is-active' : ''}`}
+                  end={item.end}
+                  to={item.to}
+                >
+                  {({ isActive }) => (
+                    <>
+                      {item.label}
+                      {isActive && (
+                        <motion.span
+                          className="nav-active-indicator"
+                          layoutId="active-nav-indicator"
+                          transition={pageTransition}
+                        />
+                      )}
+                    </>
                   )}
-                  <span className="nav-link-label">{item.label}</span>
-                </>
-              )}
-            </NavLink>
-          ))}
-        </div>
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
         <ThemeToggle theme={theme} onToggle={onToggleTheme} />
-      </nav>
+      </div>
     </header>
   )
 }
