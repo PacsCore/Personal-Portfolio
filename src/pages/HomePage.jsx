@@ -24,9 +24,9 @@ function useTypedHeading(greeting, firstName, lastName) {
     if (shown >= total) return undefined
     let delay
     if (shown === 0) delay = START_DELAY
-    else if (shown < greeting.length) delay = between(68, 82)
+    else if (shown < greeting.length) delay = between(56, 67)
     else if (shown === greeting.length) delay = GREETING_PAUSE
-    else delay = between(92, 108)
+    else delay = between(76, 88)
 
     const timeoutId = window.setTimeout(() => setCount((value) => value + 1), delay)
     return () => window.clearTimeout(timeoutId)
