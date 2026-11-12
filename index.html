@@ -6,6 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0b1118" />
     <title>Your Name | Portfolio</title>
+    <!-- Runs before first paint to avoid a theme flash; keep in sync with src/hooks/useTheme.js -->
+    <script>
+      (function () {
+        var theme
+        try {
+          theme = localStorage.getItem('portfolio-theme')
+        } catch (error) {}
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
+        }
+        document.documentElement.dataset.theme = theme
+        document
+          .querySelector('meta[name="theme-color"]')
+          .setAttribute('content', theme === 'light' ? '#f5f4ef' : '#0b1118')
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>

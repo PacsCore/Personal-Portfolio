@@ -1,30 +1,59 @@
 import { useEffect, useState } from 'react'
 
-function getInitialTheme() {
+const STORAGE_KEY = 'portfolio-theme'
+const THEME_COLORS = { dark: '#0b1118', light: '#f5f4ef' }
+const lightQuery = '(prefers-color-scheme: light)'
+
+function isTheme(value) {
+  return value === 'light' || value === 'dark'
+}
+
+function readStoredTheme() {
   try {
-    const savedTheme = window.localStorage.getItem('portfolio-theme')
-    return savedTheme === 'light' || savedTheme === 'dark' ? savedTheme : 'dark'
-  } catch (error) {
-    console.error('Unable to read the saved theme preference.', error)
-    return 'dark'
+    const stored = window.localStorage.getItem(STORAGE_KEY)
+    return isTheme(stored) ? stored : null
+  } catch {
+    return null
   }
+}
+
+function getSystemTheme() {
+  return window.matchMedia(lightQuery).matches ? 'light' : 'dark'
+}
+
+function getInitialTheme() {
+  const applied = document.documentElement.dataset.theme
+  return isTheme(applied) ? applied : readStoredTheme() ?? getSystemTheme()
 }
 
 export default function useTheme() {
   const [theme, setTheme] = useState(getInitialTheme)
+  const [hasExplicitChoice, setHasExplicitChoice] = useState(() => readStoredTheme() !== null)
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', THEME_COLORS[theme])
+  }, [theme])
+
+  useEffect(() => {
+    if (hasExplicitChoice) return undefined
+
+    const media = window.matchMedia(lightQuery)
+    const handleChange = (event) => setTheme(event.matches ? 'light' : 'dark')
+    media.addEventListener('change', handleChange)
+    return () => media.removeEventListener('change', handleChange)
+  }, [hasExplicitChoice])
+
+  function toggleTheme() {
+    const next = theme === 'dark' ? 'light' : 'dark'
+    setTheme(next)
+    setHasExplicitChoice(true)
 
     try {
-      window.localStorage.setItem('portfolio-theme', theme)
+      window.localStorage.setItem(STORAGE_KEY, next)
     } catch (error) {
       console.error('Unable to save the theme preference.', error)
     }
-  }, [theme])
-
-  function toggleTheme() {
-    setTheme((current) => (current === 'dark' ? 'light' : 'dark'))
   }
 
   return { theme, toggleTheme }
