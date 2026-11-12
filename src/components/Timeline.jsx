@@ -11,20 +11,20 @@ function Timeline() {
   const reduceMotion = useReducedMotionConfig()
 
   return (
-    <StaggerGroup className="timeline">
+    <StaggerGroup className="timeline" role="list">
       {content.timeline.map((item, index) => {
         const isOpen = openItem === index
         const descriptionId = `timeline-description-${index}`
 
         return (
-          <StaggerItem className="timeline-entry" key={`${item.year}-${index}`}>
+          <StaggerItem className="timeline-entry" role="listitem" key={`${item.year}-${index}`}>
             <span className={`timeline-dot tone-${item.tone}`} aria-hidden="true" />
             <div className="timeline-entry-content">
               <button
                 className="timeline-trigger"
                 type="button"
                 aria-expanded={isOpen}
-                aria-controls={descriptionId}
+                aria-controls={isOpen ? descriptionId : undefined}
                 onClick={() => setOpenItem(isOpen ? null : index)}
               >
                 <span className="timeline-heading">

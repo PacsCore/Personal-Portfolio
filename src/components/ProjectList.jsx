@@ -5,26 +5,27 @@ import TiltCard from './TiltCard.jsx'
 
 function ProjectList({ projects = content.projects }) {
   return (
-    <StaggerGroup className="project-list">
+    <StaggerGroup className="project-list" role="list">
       {projects.map((project, index) => (
-        <StaggerItem className="project-list-item" key={`${project.title}-${index}`}>
+        <StaggerItem className="project-list-item" role="listitem" key={`${project.title}-${index}`}>
           <TiltCard className="project-card">
             <div className="project-card-copy">
               <span className="project-index">{String(index + 1).padStart(2, '0')}</span>
               <h3>{project.title}</h3>
               <p>{project.description}</p>
-              <div className="project-tags" aria-label={content.ui.technologyTagsLabel}>
+              <ul className="project-tags" aria-label={content.ui.technologyTagsLabel}>
                 {project.tags.map((tag, tagIndex) => (
-                  <span className="tag" key={`${tag}-${tagIndex}`}>
+                  <li className="tag" key={`${tag}-${tagIndex}`}>
                     {tag}
-                  </span>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
             <a
               className="project-link"
               href={project.href || '#'}
               aria-label={`${content.ui.projectLinkLabel} ${project.title}`}
+              aria-disabled={project.href ? undefined : 'true'}
               onClick={(event) => {
                 if (!project.href) event.preventDefault()
               }}

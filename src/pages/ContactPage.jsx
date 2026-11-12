@@ -15,7 +15,14 @@ function ContactPage() {
         </Reveal>
       </section>
       <Reveal className="contact-action">
-        <a className="contact-email" href={`mailto:${email}`}>
+        <a
+          className="contact-email"
+          href={email ? `mailto:${email}` : '#'}
+          aria-disabled={email ? undefined : 'true'}
+          onClick={(event) => {
+            if (!email) event.preventDefault()
+          }}
+        >
           <span>{email || content.placeholders.email}</span>
           <FiArrowUpRight aria-hidden="true" />
         </a>

@@ -556,6 +556,9 @@ h3 {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .tag {
@@ -637,6 +640,9 @@ h3 {
   align-items: center;
   justify-content: center;
   gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .social-tilt {

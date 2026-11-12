@@ -10,6 +10,11 @@ const socialIcons = {
   discord: FaDiscord,
 }
 
+function getHref(network, details) {
+  if (network === 'email') return details.address ? `mailto:${details.address}` : ''
+  return details.href
+}
+
 function SocialLinks({ onToast }) {
   const socials = Object.entries(content.socials)
 
@@ -28,49 +33,53 @@ function SocialLinks({ onToast }) {
   }
 
   return (
-    <div className="social-links" aria-label={content.ui.socialLinksLabel}>
+    <ul className="social-links" aria-label={content.ui.socialLinksLabel}>
       {socials.map(([network, details]) => {
         const Icon = socialIcons[network]
 
         if (network === 'discord') {
           return (
-            <TiltCard className="social-tilt" key={network}>
-              <button
-                type="button"
-                className="social-link"
-                aria-label={details.ariaLabel}
-                title={details.ariaLabel}
-                onClick={() => copyDiscord(details.username)}
-              >
-                <Icon aria-hidden="true" />
-              </button>
-            </TiltCard>
+            <li key={network}>
+              <TiltCard className="social-tilt">
+                <button
+                  type="button"
+                  className="social-link"
+                  aria-label={details.ariaLabel}
+                  title={details.ariaLabel}
+                  onClick={() => copyDiscord(details.username)}
+                >
+                  <Icon aria-hidden="true" />
+                </button>
+              </TiltCard>
+            </li>
           )
         }
 
-        const isEmail = network === 'email'
-        const href = isEmail ? `mailto:${details.address}` : details.href || '#'
-        const label = details.label
+        const href = getHref(network, details)
+        const isExternal = Boolean(href) && network !== 'email'
 
         return (
-          <TiltCard className="social-tilt" key={network}>
-            <a
-              className="social-link"
-              href={href}
-              aria-label={label}
-              title={label}
-              onClick={(event) => {
-                if (!isEmail && !details.href) event.preventDefault()
-              }}
-              target={!isEmail && details.href ? '_blank' : undefined}
-              rel={!isEmail && details.href ? 'noreferrer' : undefined}
-            >
-              <Icon aria-hidden="true" />
-            </a>
-          </TiltCard>
+          <li key={network}>
+            <TiltCard className="social-tilt">
+              <a
+                className="social-link"
+                href={href || '#'}
+                aria-label={details.label}
+                aria-disabled={href ? undefined : 'true'}
+                title={details.label}
+                onClick={(event) => {
+                  if (!href) event.preventDefault()
+                }}
+                target={isExternal ? '_blank' : undefined}
+                rel={isExternal ? 'noreferrer' : undefined}
+              >
+                <Icon aria-hidden="true" />
+              </a>
+            </TiltCard>
+          </li>
         )
       })}
-    </div>
+    </ul>
   )
 }
 

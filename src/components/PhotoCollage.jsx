@@ -49,6 +49,7 @@ function PhotoCollage() {
         pointerX.set(0)
         pointerY.set(0)
       }}
+      role="group"
       aria-label={content.ui.collageLabel}
     >
       {content.images.collage.map((image, index) => (

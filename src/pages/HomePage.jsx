@@ -29,7 +29,7 @@ function HomePage() {
           <img src={content.images.hero.src} alt={content.images.hero.alt} />
         </motion.div>
 
-        <StaggerGroup className="image-gallery" aria-label={content.ui.galleryLabel}>
+        <StaggerGroup className="image-gallery" role="group" aria-label={content.ui.galleryLabel}>
           {content.images.gallery.map((image, index) => (
             <StaggerItem className={`gallery-image gallery-image-${index + 1}`} key={image.alt}>
               <ParallaxImage
