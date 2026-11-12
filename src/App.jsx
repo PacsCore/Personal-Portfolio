@@ -6,6 +6,8 @@ import AboutPage from './pages/AboutPage.jsx'
 import ContactPage from './pages/ContactPage.jsx'
 import HomePage from './pages/HomePage.jsx'
 import ProjectsPage from './pages/ProjectsPage.jsx'
+import './styles/tokens.css'
+import './styles/fonts.css'
 import './App.css'
 
 const router = createBrowserRouter([

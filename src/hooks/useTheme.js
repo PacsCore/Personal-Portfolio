@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 
 const STORAGE_KEY = 'portfolio-theme'
-const THEME_COLORS = { dark: '#0b1118', light: '#f5f4ef' }
+// Match --color-bg in src/styles/tokens.css and the inline script in index.html.
+const THEME_COLORS = { dark: '#121820', light: '#f3f3f0' }
 const lightQuery = '(prefers-color-scheme: light)'
 
 function isTheme(value) {
