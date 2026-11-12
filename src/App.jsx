@@ -10,6 +10,8 @@ import WorkPage from './pages/WorkPage.jsx'
 import './styles/tokens.css'
 import './styles/fonts.css'
 import './App.css'
+import { Analytics } from "@vercel/analytics/next"
+
 
 function LegacyProjectRedirect() {
   const { slug } = useParams()
@@ -40,6 +42,7 @@ function App() {
   return (
     <MotionConfig reducedMotion="user">
       <RouterProvider router={router} />
+      <Analytics />
     </MotionConfig>
   )
 }
