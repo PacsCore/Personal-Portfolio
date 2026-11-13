@@ -64,11 +64,11 @@ const content = {
     intro: 'A few things I have been building.',
     // EDIT ME: genuine details only. `href` is the live site or repository.
     projects: [
-      { slug: 'swipeship', title: 'SwipeShip', description: null, role: null, stack: null, year: null, href: 'https://swipeship.vercel.app/' },
-      { slug: 'daily-idea-mailer', title: 'Daily Idea Mailer', description: null, role: null, stack: null, year: null, href: 'https://github.com/PacsCore/daily-idea-mailer' },
-      { slug: 'class-cloud', title: 'Class Cloud', description: null, role: null, stack: null, year: null, href: null },
-      { slug: 'art-code-converter', title: 'Art Code Converter', description: null, role: null, stack: null, year: null, href: 'https://pacscore.github.io/code-art-converter/' },
-      { slug: 'math-notes', title: 'Math Notes', description: null, role: null, stack: null, year: null, href: 'https://pacscore.github.io/math-notes/' },
+      { slug: 'swipeship', title: 'SwipeShip', description: 'swipe-based platform to discover, save, and build coding projects.', role: 'Creator & Full-Stack Developer', stack: 'Next.js, React, Supabase, Vercel', year: '2026', href: 'https://swipeship.vercel.app/' },
+      { slug: 'daily-idea-mailer', title: 'Daily Idea Mailer', description: 'AI-powered coding ideas, delivered to your inbox daily.', role: 'Automation Developer', stack: 'Node.js, Google Gemini, Github Actions, Brevo', year: '2026', href: 'https://github.com/PacsCore/daily-idea-mailer' },
+      { slug: 'class-cloud', title: 'Class Cloud', description: 'simple workspace for managing class materials.', role: 'Frontend Developer & UI Designer', stack: 'HTML, CSS, JavaScript', year: '2026', href: null },
+      { slug: 'art-code-converter', title: 'Art Code Converter', description: 'Transform images into ASCII andcode-generated artwork.', role: 'Creative Developer', stack: 'HTML, CSS, JavaScript, Canvas API', year: '2026', href: 'https://pacscore.github.io/code-art-converter/' },
+      { slug: 'math-notes', title: 'Math Notes', description: 'Digital notebook built for mathematical notes and formulas.', role: 'React Developer & UI Designer', stack: 'React, Vite, JavaScript, function-plot', year: '2026', href: 'https://pacscore.github.io/math-notes/' },
     ],
   },
 
