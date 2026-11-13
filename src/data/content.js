@@ -53,9 +53,9 @@ const content = {
     ],
     // EDIT ME: real milestones only, newest first.
     timeline: [
-      { year: null, title: null, text: null },
-      { year: null, title: null, text: null },
-      { year: null, title: null, text: null },
+      { year: '2025-Present', title: 'From Design to Development', text: 'My interest in software and technology grew into building real projects. Today, I\'m exploring full-stack development while creating an app for a café.' },
+      { year: '2022-2023', title: 'Learning from a designer', text: 'An internship with a professional graphic designer gave me hands-on experience with Adobe Creative Cloud and a deeper understanding of visual design.' },
+      { year: '2019-Present', title: 'A creative foundation', text: 'I\'ve been attending an art-focused high school in Vienna since 2019, where creativity and visual thinking became part of how I approach things.' },
     ],
   },
 
