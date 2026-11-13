@@ -65,7 +65,10 @@ const content = {
     // EDIT ME: genuine details only. `href` is the live site or repository.
     projects: [
       { slug: 'swipeship', title: 'SwipeShip', description: null, role: null, stack: null, year: null, href: null },
-      { slug: 'coreblog', title: 'CoreBlog', description: null, role: null, stack: null, year: null, href: null },
+      { slug: 'daily-idea-mailer', title: 'Daily Idea Mailer', description: null, role: null, stack: null, year: null, href: null },
+      { slug: 'class-cloud', title: 'Class Cloud', description: null, role: null, stack: null, year: null, href: null },
+      { slug: 'art-code-converter', title: 'Art Code Converter', description: null, role: null, stack: null, year: null, href: null },
+      { slug: 'math-notes', title: 'Math Notes', description: null, role: null, stack: null, year: null, href: null },
     ],
   },
 
