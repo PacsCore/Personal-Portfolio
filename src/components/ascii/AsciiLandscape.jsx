@@ -8,7 +8,7 @@ const STATIC_TIME = 20
 
 // Decorative, so hidden from assistive tech. Text is written imperatively to the
 // three <pre> layers — no React renders per frame.
-function AsciiLandscape({ className = '' }) {
+function AsciiLandscape({ className = '', active = true, revealSeconds = REVEAL_SECONDS, onRevealed }) {
   const rootRef = useRef(null)
   const skyRef = useRef(null)
   const farRef = useRef(null)
@@ -16,6 +16,7 @@ function AsciiLandscape({ className = '' }) {
   const reduceMotion = useReducedMotion()
 
   useEffect(() => {
+    if (!active) return undefined
     const root = rootRef.current
     const layers = { sky: skyRef.current, far: farRef.current, near: nearRef.current }
 
@@ -30,6 +31,7 @@ function AsciiLandscape({ className = '' }) {
       paint(STATIC_TIME, {})
       root.style.setProperty('--px', '0')
       root.style.setProperty('--py', '0')
+      onRevealed?.()
       return undefined
     }
 
@@ -40,6 +42,7 @@ function AsciiLandscape({ className = '' }) {
     let frameId = 0
     let running = false
     let lastPaint = 0
+    let revealed = false
     const start = performance.now()
 
     function loop(now) {
@@ -53,10 +56,16 @@ function AsciiLandscape({ className = '' }) {
         root.style.setProperty('--py', parallax.y.toFixed(3))
       }
 
-      if (dirty || now - lastPaint >= FRAME_MS) {
+      // Paint every frame during the reveal so it reads smoothly.
+      if (dirty || !revealed || now - lastPaint >= FRAME_MS) {
         dirty = false
         lastPaint = now
-        paint(STATIC_TIME + t, { lens, reveal: Math.min(1, t / REVEAL_SECONDS) })
+        const reveal = Math.min(1, t / revealSeconds)
+        paint(STATIC_TIME + t, { lens, reveal })
+        if (reveal >= 1 && !revealed) {
+          revealed = true
+          onRevealed?.()
+        }
       }
     }
 
@@ -89,7 +98,14 @@ function AsciiLandscape({ className = '' }) {
       dirty = true
     }
 
-    const observer = new IntersectionObserver(([entry]) => setRunning(entry.isIntersecting))
+    // Off-screen there is nothing to watch, so don't hold back the rest of the page.
+    const observer = new IntersectionObserver(([entry]) => {
+      setRunning(entry.isIntersecting)
+      if (!entry.isIntersecting && !revealed) {
+        revealed = true
+        onRevealed?.()
+      }
+    })
     observer.observe(root)
 
     if (finePointer) {
@@ -103,7 +119,7 @@ function AsciiLandscape({ className = '' }) {
       window.removeEventListener('pointermove', handlePointer)
       document.documentElement.removeEventListener('pointerleave', handleLeave)
     }
-  }, [reduceMotion])
+  }, [reduceMotion, active, revealSeconds, onRevealed])
 
   return (
     <div
