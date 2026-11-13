@@ -67,8 +67,8 @@ const content = {
       { slug: 'swipeship', title: 'SwipeShip', description: null, role: null, stack: null, year: null, href: 'https://swipeship.vercel.app/' },
       { slug: 'daily-idea-mailer', title: 'Daily Idea Mailer', description: null, role: null, stack: null, year: null, href: 'https://github.com/PacsCore/daily-idea-mailer' },
       { slug: 'class-cloud', title: 'Class Cloud', description: null, role: null, stack: null, year: null, href: null },
-      { slug: 'art-code-converter', title: 'Art Code Converter', description: null, role: null, stack: null, year: null, href: null },
-      { slug: 'math-notes', title: 'Math Notes', description: null, role: null, stack: null, year: null, href: null },
+      { slug: 'art-code-converter', title: 'Art Code Converter', description: null, role: null, stack: null, year: null, href: 'https://pacscore.github.io/code-art-converter/' },
+      { slug: 'math-notes', title: 'Math Notes', description: null, role: null, stack: null, year: null, href: 'https://pacscore.github.io/math-notes/' },
     ],
   },
 
