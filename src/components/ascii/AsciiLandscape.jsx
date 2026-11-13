@@ -8,7 +8,7 @@ const STATIC_TIME = 20
 
 // Decorative, so hidden from assistive tech. Text is written imperatively to the
 // three <pre> layers — no React renders per frame.
-function AsciiLandscape({ className = '', revealSeconds = REVEAL_SECONDS }) {
+function AsciiLandscape({ className = '' }) {
   const rootRef = useRef(null)
   const skyRef = useRef(null)
   const farRef = useRef(null)
@@ -40,7 +40,6 @@ function AsciiLandscape({ className = '', revealSeconds = REVEAL_SECONDS }) {
     let frameId = 0
     let running = false
     let lastPaint = 0
-    let revealed = false
     const start = performance.now()
 
     function loop(now) {
@@ -54,13 +53,10 @@ function AsciiLandscape({ className = '', revealSeconds = REVEAL_SECONDS }) {
         root.style.setProperty('--py', parallax.y.toFixed(3))
       }
 
-      // Paint every frame during the reveal so it reads smoothly.
-      if (dirty || !revealed || now - lastPaint >= FRAME_MS) {
+      if (dirty || now - lastPaint >= FRAME_MS) {
         dirty = false
         lastPaint = now
-        const reveal = Math.min(1, t / revealSeconds)
-        paint(STATIC_TIME + t, { lens, reveal })
-        revealed = reveal >= 1
+        paint(STATIC_TIME + t, { lens, reveal: Math.min(1, t / REVEAL_SECONDS) })
       }
     }
 
@@ -107,7 +103,7 @@ function AsciiLandscape({ className = '', revealSeconds = REVEAL_SECONDS }) {
       window.removeEventListener('pointermove', handlePointer)
       document.documentElement.removeEventListener('pointerleave', handleLeave)
     }
-  }, [reduceMotion, revealSeconds])
+  }, [reduceMotion])
 
   return (
     <div
