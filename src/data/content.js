@@ -32,7 +32,7 @@ const content = {
     title: 'About',
     // EDIT ME: replace with your own words.
     intro: [
-      "I'm Enrique — a software engineer and creative developer who enjoys building thoughtful digital experiences.",
+      "I'm Enrique — a student with a passion for software engineering and creative development who enjoys building thoughtful digital experiences.",
       'Most of what I make sits somewhere between code and design.',
     ],
     // EDIT ME: add files under public/images/about/ and set `src` + `alt`.
