@@ -37,9 +37,9 @@ const content = {
     ],
     // EDIT ME: add files under public/images/about/ and set `src` + `alt`.
     photos: [
-      { src: null, alt: '', caption: null },
-      { src: null, alt: '', caption: null },
-      { src: null, alt: '', caption: null },
+      { src: '/images/about/photo1.jpeg', alt: 'Photo 1', caption: 'a little bit about me' },
+      { src: '/images/about/photo2.jpeg', alt: 'Photo 2', caption: 'wired in' },
+      { src: '/images/about/photo3.jpeg', alt: 'Photo 3', caption: 'life outside the screen' },
     ],
     interests: [
       {
