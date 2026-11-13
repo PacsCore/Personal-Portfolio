@@ -8,7 +8,7 @@ const STATIC_TIME = 20
 
 // Decorative, so hidden from assistive tech. Text is written imperatively to the
 // three <pre> layers — no React renders per frame.
-function AsciiLandscape({ className = '', active = true, revealSeconds = REVEAL_SECONDS, onRevealed }) {
+function AsciiLandscape({ className = '', revealSeconds = REVEAL_SECONDS }) {
   const rootRef = useRef(null)
   const skyRef = useRef(null)
   const farRef = useRef(null)
@@ -16,7 +16,6 @@ function AsciiLandscape({ className = '', active = true, revealSeconds = REVEAL_
   const reduceMotion = useReducedMotion()
 
   useEffect(() => {
-    if (!active) return undefined
     const root = rootRef.current
     const layers = { sky: skyRef.current, far: farRef.current, near: nearRef.current }
 
@@ -31,7 +30,6 @@ function AsciiLandscape({ className = '', active = true, revealSeconds = REVEAL_
       paint(STATIC_TIME, {})
       root.style.setProperty('--px', '0')
       root.style.setProperty('--py', '0')
-      onRevealed?.()
       return undefined
     }
 
@@ -62,10 +60,7 @@ function AsciiLandscape({ className = '', active = true, revealSeconds = REVEAL_
         lastPaint = now
         const reveal = Math.min(1, t / revealSeconds)
         paint(STATIC_TIME + t, { lens, reveal })
-        if (reveal >= 1 && !revealed) {
-          revealed = true
-          onRevealed?.()
-        }
+        revealed = reveal >= 1
       }
     }
 
@@ -98,14 +93,7 @@ function AsciiLandscape({ className = '', active = true, revealSeconds = REVEAL_
       dirty = true
     }
 
-    // Off-screen there is nothing to watch, so don't hold back the rest of the page.
-    const observer = new IntersectionObserver(([entry]) => {
-      setRunning(entry.isIntersecting)
-      if (!entry.isIntersecting && !revealed) {
-        revealed = true
-        onRevealed?.()
-      }
-    })
+    const observer = new IntersectionObserver(([entry]) => setRunning(entry.isIntersecting))
     observer.observe(root)
 
     if (finePointer) {
@@ -119,7 +107,7 @@ function AsciiLandscape({ className = '', active = true, revealSeconds = REVEAL_
       window.removeEventListener('pointermove', handlePointer)
       document.documentElement.removeEventListener('pointerleave', handleLeave)
     }
-  }, [reduceMotion, active, revealSeconds, onRevealed])
+  }, [reduceMotion, revealSeconds])
 
   return (
     <div

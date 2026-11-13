@@ -1,15 +1,13 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useReducedMotion } from 'framer-motion'
 import AsciiLandscape from '../components/ascii/AsciiLandscape.jsx'
 import SocialLinks from '../components/ui/SocialLinks.jsx'
 import content from '../data/content.js'
 
-// ~125 WPM (625 chars/min ≈ 96ms per char), with slight jitter so it reads as human.
+// ~120 WPM (600 chars/min ≈ 100ms per char), jittered so it reads as hand-typed.
 const CHAR_MIN = 85
-const CHAR_MAX = 107
-const GREETING_PAUSE = 320
-const SKELETON_MS = 200
-const FADE_MS = 250
+const CHAR_MAX = 114
+const GREETING_PAUSE = 253
 const between = (min, max) => min + Math.random() * (max - min)
 
 // Intro plays once per page load; later visits to Home render the final state.
@@ -19,23 +17,20 @@ function prefersReducedMotion() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
 
-// Types greeting → pause → first name → last name once `enabled`. `count` is the
-// number of characters typed across all three parts.
-function useTypedHeading(greeting, firstName, lastName, enabled, skip) {
+// Types greeting → pause → first name → last name. `count` is the number of
+// characters typed across all three parts.
+function useTypedHeading(greeting, firstName, lastName, skip) {
   const total = greeting.length + firstName.length + lastName.length
   const reduceMotion = useReducedMotion()
   const [count, setCount] = useState(() => (skip ? total : 0))
   const shown = reduceMotion ? total : count
 
   useEffect(() => {
-    if (!enabled || shown >= total) return undefined
-    let delay
-    if (shown === greeting.length && shown > 0) delay = GREETING_PAUSE
-    else delay = between(CHAR_MIN, CHAR_MAX)
-
+    if (shown >= total) return undefined
+    const delay = shown === greeting.length && shown > 0 ? GREETING_PAUSE : between(CHAR_MIN, CHAR_MAX)
     const timeoutId = window.setTimeout(() => setCount((value) => value + 1), delay)
     return () => window.clearTimeout(timeoutId)
-  }, [enabled, shown, total, greeting.length])
+  }, [shown, total, greeting.length])
 
   const afterGreeting = shown - greeting.length
   return {
@@ -45,25 +40,6 @@ function useTypedHeading(greeting, firstName, lastName, enabled, skip) {
     caret: shown <= greeting.length ? 'greeting' : afterGreeting <= firstName.length ? 'first' : 'last',
     done: shown >= total,
   }
-}
-
-// Advances skeleton → play (typing + ASCII reveal in parallel) → rest → done.
-function useIntroSequence(phase, setPhase, typingDone, artDone) {
-  useEffect(() => {
-    introPlayed = true
-  }, [])
-
-  useEffect(() => {
-    let next = null
-    let delay = 0
-    if (phase === 'skeleton') [next, delay] = ['play', SKELETON_MS]
-    else if (phase === 'play' && typingDone && artDone) next = 'rest'
-    else if (phase === 'rest') [next, delay] = ['done', FADE_MS]
-    if (!next) return undefined
-
-    const timeoutId = window.setTimeout(() => setPhase(next), delay)
-    return () => window.clearTimeout(timeoutId)
-  }, [phase, setPhase, typingDone, artDone])
 }
 
 // Typed characters plus the untyped remainder kept invisible, so the line keeps
@@ -81,18 +57,17 @@ function TypedText({ text, count, caret = null }) {
 function HomePage() {
   const { home } = content
   const [playsIntro] = useState(() => !introPlayed && !prefersReducedMotion())
-  const [phase, setPhase] = useState(playsIntro ? 'skeleton' : 'done')
-  const typed = useTypedHeading(home.greeting, home.firstName, home.lastName, phase !== 'skeleton', phase === 'done')
+  const typed = useTypedHeading(home.greeting, home.firstName, home.lastName, !playsIntro)
   const typingChars = home.greeting.length + home.firstName.length + home.lastName.length
   // ASCII reveal is stretched to the expected typing time so both land together.
   const revealSeconds = (typingChars * ((CHAR_MIN + CHAR_MAX) / 2) + GREETING_PAUSE) / 1000
-  const [artDone, setArtDone] = useState(false)
-  const handleArtRevealed = useCallback(() => setArtDone(true), [])
-  useIntroSequence(phase, setPhase, typed.done, artDone)
+  useEffect(() => {
+    introPlayed = true
+  }, [])
   const nameCaret = <span className={`name-caret${typed.done ? '' : ' is-typing'}`} />
 
   return (
-    <div className="home" data-intro={phase === 'done' ? undefined : phase}>
+    <div className="home">
       <section className="home-hero">
         <div className="home-intro">
           <h1 className="home-title">
@@ -112,17 +87,10 @@ function HomePage() {
               <TypedText text={home.lastName} count={typed.last} caret={typed.caret === 'last' && nameCaret} />
             </span>
           </h1>
-          <p className="home-lede">
-            <span className="home-lede-text">{home.intro}</span>
-          </p>
+          <p className="home-lede">{home.intro}</p>
         </div>
 
-        <AsciiLandscape
-          className="home-art"
-          active={phase !== 'skeleton'}
-          revealSeconds={playsIntro ? revealSeconds : undefined}
-          onRevealed={handleArtRevealed}
-        />
+        <AsciiLandscape className="home-art" revealSeconds={playsIntro ? revealSeconds : undefined} />
       </section>
 
       <div className="home-footer">
