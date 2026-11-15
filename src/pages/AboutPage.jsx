@@ -87,25 +87,28 @@ function Photo({ photo, index }) {
   return (
     <figure className="photo">
       <div className="window">
-        <div className="window-bar" aria-hidden="true">
-          <span className="window-menu">...</span>
-          <span className="window-title">{filename}</span>
-          <span className="window-controls">
-            <span>—</span>
-            <span>□</span>
-          </span>
-        </div>
-        {photo.src ? (
-          // On narrow screens the gallery scrolls sideways and the third photo starts offscreen.
-          <PhotoImage photo={photo} eager={index < 2} filename={filename} />
-        ) : (
-          <div className="photo-frame">
-            <div className="photo-empty">
-              <pre aria-hidden="true">{PHOTO_TEXTURE}</pre>
-              <Placeholder>photo {number}</Placeholder>
-            </div>
+        <div className="window-body">
+          <div className="window-bar" aria-hidden="true">
+            <span className="window-menu">...</span>
+            <span className="window-title">{filename}</span>
+            <span className="window-grip" />
+            <span className="window-controls">
+              <span className="window-control window-control-min" />
+              <span className="window-control window-control-max" />
+            </span>
           </div>
-        )}
+          {photo.src ? (
+            // On narrow screens the gallery scrolls sideways and the third photo starts offscreen.
+            <PhotoImage photo={photo} eager={index < 2} filename={filename} />
+          ) : (
+            <div className="photo-frame">
+              <div className="photo-empty">
+                <pre aria-hidden="true">{PHOTO_TEXTURE}</pre>
+                <Placeholder>photo {number}</Placeholder>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
       <figcaption>
         <span className="photo-number">{number}</span>

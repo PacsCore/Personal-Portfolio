@@ -48,13 +48,14 @@ const content = {
         caption: 'a little bit about me',
       },
       {
-        src: '/images/about/photo2-1600.jpg',
-        width: 1600,
-        height: 1200,
+        // Variants are rotated upright from the original's EXIF orientation (6).
+        src: '/images/about/photo2-1280.jpg',
+        width: 1280,
+        height: 1707,
         sources: [
-          { src: '/images/about/photo2-800.webp', width: 800 },
-          { src: '/images/about/photo2-1200.webp', width: 1200 },
-          { src: '/images/about/photo2-1600.webp', width: 1600 },
+          { src: '/images/about/photo2-640.webp', width: 640 },
+          { src: '/images/about/photo2-960.webp', width: 960 },
+          { src: '/images/about/photo2-1280.webp', width: 1280 },
         ],
         alt: 'Photo 2',
         caption: 'wired in',

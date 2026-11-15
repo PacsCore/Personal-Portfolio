@@ -697,52 +697,72 @@ h1:focus {
   margin-top: var(--space-7);
 }
 
-/* ---- Retro window: 1px ink border, flat title bar, hard offset shadow ---- */
+/* ---- Retro window ----
+   .window carries the hard shadow (a 0-blur drop-shadow, so it follows the
+   clipped outline); .window-body is clipped to a 3px stepped-pixel outline
+   and draws the 1px ink border. */
 
 .window {
   --window-ink: var(--ink-near);
-  --window-shadow: var(--color-border-strong);
+  --window-shadow: color-mix(in srgb, var(--ink-near) 28%, var(--color-bg));
+  --window-step: polygon(
+    3px 0, calc(100% - 3px) 0, calc(100% - 3px) 1px, calc(100% - 2px) 1px,
+    calc(100% - 2px) 2px, calc(100% - 1px) 2px, calc(100% - 1px) 3px, 100% 3px,
+    100% calc(100% - 3px), calc(100% - 1px) calc(100% - 3px),
+    calc(100% - 1px) calc(100% - 2px), calc(100% - 2px) calc(100% - 2px),
+    calc(100% - 2px) calc(100% - 1px), calc(100% - 3px) calc(100% - 1px),
+    calc(100% - 3px) 100%, 3px 100%, 3px calc(100% - 1px), 2px calc(100% - 1px),
+    2px calc(100% - 2px), 1px calc(100% - 2px), 1px calc(100% - 3px), 0 calc(100% - 3px),
+    0 3px, 1px 3px, 1px 2px, 2px 2px, 2px 1px, 3px 1px
+  );
 
+  filter: drop-shadow(5px 5px 0 var(--window-shadow));
+  transition:
+    transform var(--duration-base) var(--ease-out),
+    filter var(--duration-base) var(--ease-out);
+}
+
+.photo:hover .window {
+  transform: translate(-2px, -2px);
+  filter: drop-shadow(7px 7px 0 var(--window-shadow));
+}
+
+.window-body {
   position: relative;
   border: 1px solid var(--window-ink);
   background: var(--color-surface);
-  box-shadow: 4px 4px 0 var(--window-shadow);
-  transition:
-    transform var(--duration-base) var(--ease-out),
-    box-shadow var(--duration-base) var(--ease-out);
+  clip-path: var(--window-step);
 }
 
-/* Pixel-stepped corners: knock out each 2x2 corner and add one ink pixel on
-   the diagonal, so the outline reads like a bitmap window. */
-.window::after {
+/* The two ink pixels per corner that close the stepped outline. */
+.window-body::after {
+  --px: linear-gradient(var(--window-ink), var(--window-ink));
+
   content: "";
   position: absolute;
   inset: -1px;
   z-index: 2;
   pointer-events: none;
   background:
-    linear-gradient(var(--window-ink), var(--window-ink)) left 1px top 1px / 1px 1px no-repeat,
-    linear-gradient(var(--window-ink), var(--window-ink)) right 1px top 1px / 1px 1px no-repeat,
-    linear-gradient(var(--window-ink), var(--window-ink)) left 1px bottom 1px / 1px 1px no-repeat,
-    linear-gradient(var(--window-ink), var(--window-ink)) right 1px bottom 1px / 1px 1px no-repeat,
-    linear-gradient(var(--color-bg), var(--color-bg)) left top / 2px 2px no-repeat,
-    linear-gradient(var(--color-bg), var(--color-bg)) right top / 2px 2px no-repeat,
-    linear-gradient(var(--color-bg), var(--color-bg)) left bottom / 2px 2px no-repeat,
-    linear-gradient(var(--color-bg), var(--color-bg)) right bottom / 2px 2px no-repeat;
-}
-
-.photo:hover .window {
-  transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0 var(--window-shadow);
+    var(--px) left 2px top 1px / 1px 1px no-repeat,
+    var(--px) left 1px top 2px / 1px 1px no-repeat,
+    var(--px) right 2px top 1px / 1px 1px no-repeat,
+    var(--px) right 1px top 2px / 1px 1px no-repeat,
+    var(--px) left 2px bottom 1px / 1px 1px no-repeat,
+    var(--px) left 1px bottom 2px / 1px 1px no-repeat,
+    var(--px) right 2px bottom 1px / 1px 1px no-repeat,
+    var(--px) right 1px bottom 2px / 1px 1px no-repeat;
 }
 
 .window-bar {
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  height: 26px;
-  padding: 0 var(--space-2);
+  height: 28px;
+  padding: 0 var(--space-2) 0 10px;
   border-bottom: 1px solid var(--window-ink);
+  /* A second hairline under the rule, like a classic double-ruled title bar. */
+  box-shadow: 0 2px 0 -1px var(--color-border-strong);
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-mono);
@@ -758,26 +778,54 @@ h1:focus {
 }
 
 .window-title {
-  flex: 1;
   min-width: 0;
   overflow: hidden;
+  font-weight: 500;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.window-controls {
-  display: flex;
-  gap: 6px;
-  color: var(--color-text-muted);
+/* Flat ruled grip filling the gap between title and controls. */
+.window-grip {
+  flex: 1;
+  min-width: var(--space-3);
+  height: 7px;
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--color-border-strong) 0 1px,
+    transparent 1px 3px
+  );
 }
 
-.window-controls span {
-  display: grid;
-  place-items: center;
-  width: 14px;
-  height: 14px;
-  border: 1px solid var(--color-border-strong);
-  font-size: 9px;
+.window-controls {
+  display: flex;
+  gap: 4px;
+}
+
+.window-control {
+  position: relative;
+  width: 13px;
+  height: 13px;
+  border: 1px solid var(--window-ink);
+  background: var(--color-bg);
+}
+
+.window-control-min::before {
+  content: "";
+  position: absolute;
+  left: 3px;
+  right: 3px;
+  bottom: 3px;
+  height: 1px;
+  background: var(--window-ink);
+}
+
+.window-control-max::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 1px solid var(--window-ink);
+  border-top-width: 2px;
 }
 
 .photo-frame {
@@ -792,11 +840,30 @@ h1:focus {
   height: 100%;
   object-fit: cover;
   opacity: 0;
-  transition: opacity var(--duration-slow) var(--ease-out);
 }
 
+/* Entrance: a short fade plus a stepped top-to-bottom reveal, like an old
+   progressive image draw. Runs on load whether or not the file was cached. */
 .photo-frame[data-status="loaded"] img {
   opacity: 1;
+  animation:
+    photo-fade 300ms var(--ease-out) both,
+    photo-scan 300ms steps(6, end) both;
+}
+
+@keyframes photo-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes photo-scan {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0);
+  }
 }
 
 .photo-frame[data-status="error"] img {
@@ -820,6 +887,15 @@ h1:focus {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   letter-spacing: var(--tracking-mono);
+  /* Only appears if the image is still pending after a beat, so cached images
+     don't flash the loader. The image itself is never delayed. */
+  animation: photo-loading-in 160ms 150ms both;
+}
+
+@keyframes photo-loading-in {
+  from {
+    opacity: 0;
+  }
 }
 
 .hourglass {
@@ -1302,10 +1378,12 @@ h1:focus {
 
   .photo:hover .window {
     transform: none;
-    box-shadow: 4px 4px 0 var(--window-shadow);
+    filter: drop-shadow(5px 5px 0 var(--window-shadow));
   }
 
-  /* Hold one hourglass frame and a static bar instead of animating. */
+  /* Show the photo at once; hold one hourglass frame and a static bar. */
+  .photo-frame[data-status="loaded"] img,
+  .photo-loading,
   .hourglass > span,
   .photo-progress span {
     animation: none;
