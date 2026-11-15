@@ -697,24 +697,196 @@ h1:focus {
   margin-top: var(--space-7);
 }
 
-.photo-frame {
-  aspect-ratio: 4 / 5;
-  overflow: hidden;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
+/* ---- Retro window: 1px ink border, flat title bar, hard offset shadow ---- */
+
+.window {
+  --window-ink: var(--ink-near);
+  --window-shadow: var(--color-border-strong);
+
+  position: relative;
+  border: 1px solid var(--window-ink);
   background: var(--color-surface);
-  transform: rotate(var(--tilt));
-  transition: transform var(--duration-slow) var(--ease-out);
+  box-shadow: 4px 4px 0 var(--window-shadow);
+  transition:
+    transform var(--duration-base) var(--ease-out),
+    box-shadow var(--duration-base) var(--ease-out);
 }
 
-.photo:hover .photo-frame {
-  transform: rotate(0deg) translateY(-4px);
+/* Pixel-stepped corners: knock out each 2x2 corner and add one ink pixel on
+   the diagonal, so the outline reads like a bitmap window. */
+.window::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--window-ink), var(--window-ink)) left 1px top 1px / 1px 1px no-repeat,
+    linear-gradient(var(--window-ink), var(--window-ink)) right 1px top 1px / 1px 1px no-repeat,
+    linear-gradient(var(--window-ink), var(--window-ink)) left 1px bottom 1px / 1px 1px no-repeat,
+    linear-gradient(var(--window-ink), var(--window-ink)) right 1px bottom 1px / 1px 1px no-repeat,
+    linear-gradient(var(--color-bg), var(--color-bg)) left top / 2px 2px no-repeat,
+    linear-gradient(var(--color-bg), var(--color-bg)) right top / 2px 2px no-repeat,
+    linear-gradient(var(--color-bg), var(--color-bg)) left bottom / 2px 2px no-repeat,
+    linear-gradient(var(--color-bg), var(--color-bg)) right bottom / 2px 2px no-repeat;
+}
+
+.photo:hover .window {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--window-shadow);
+}
+
+.window-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 26px;
+  padding: 0 var(--space-2);
+  border-bottom: 1px solid var(--window-ink);
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: var(--tracking-mono);
+  line-height: 1;
+  user-select: none;
+}
+
+.window-menu {
+  color: var(--color-text-quiet);
+  transform: translateY(-3px);
+}
+
+.window-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.window-controls {
+  display: flex;
+  gap: 6px;
+  color: var(--color-text-muted);
+}
+
+.window-controls span {
+  display: grid;
+  place-items: center;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--color-border-strong);
+  font-size: 9px;
+}
+
+.photo-frame {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--color-surface);
 }
 
 .photo-frame img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  opacity: 0;
+  transition: opacity var(--duration-slow) var(--ease-out);
+}
+
+.photo-frame[data-status="loaded"] img {
+  opacity: 1;
+}
+
+.photo-frame[data-status="error"] img {
+  visibility: hidden;
+}
+
+/* ---- Loading state: neutral dotted placeholder + hourglass + segments ---- */
+
+.photo-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  background-color: var(--color-surface);
+  background-image: radial-gradient(var(--color-border-strong) 1px, transparent 1.5px);
+  background-size: 10px 10px;
+  color: var(--color-text-quiet);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-mono);
+}
+
+.hourglass {
+  display: grid;
+  color: var(--color-text-muted);
+  font-size: 11px;
+  line-height: 1.15;
+  white-space: pre;
+}
+
+.hourglass > span {
+  grid-area: 1 / 1;
+  opacity: 0;
+  animation: hourglass-frame 1.8s steps(1, end) infinite;
+}
+
+.hourglass > span:nth-child(2) {
+  animation-delay: 0.6s;
+}
+
+.hourglass > span:nth-child(3) {
+  animation-delay: 1.2s;
+}
+
+@keyframes hourglass-frame {
+  0% {
+    opacity: 1;
+  }
+  33.333% {
+    opacity: 0;
+  }
+}
+
+.photo-loading-label {
+  padding: 2px 6px;
+  background: var(--color-surface);
+}
+
+.photo-progress {
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+}
+
+.photo-progress span {
+  width: 6px;
+  height: 8px;
+  background: var(--color-text-quiet);
+  opacity: 0.15;
+  animation: progress-segment 1.6s steps(1, end) infinite;
+  animation-delay: calc(var(--seg) * 0.2s);
+}
+
+/* Indeterminate: a short run of lit blocks sweeps left to right. */
+@keyframes progress-segment {
+  0% {
+    opacity: 1;
+  }
+  37.5% {
+    opacity: 0.15;
+  }
+}
+
+.photo-error {
+  background-image: none;
 }
 
 .photo-empty {
@@ -1128,8 +1300,22 @@ h1:focus {
     animation: none;
   }
 
-  .photo-frame,
-  .photo:hover .photo-frame {
+  .photo:hover .window {
     transform: none;
+    box-shadow: 4px 4px 0 var(--window-shadow);
+  }
+
+  /* Hold one hourglass frame and a static bar instead of animating. */
+  .hourglass > span,
+  .photo-progress span {
+    animation: none;
+  }
+
+  .hourglass > span:first-child {
+    opacity: 1;
+  }
+
+  .photo-progress span:nth-child(-n + 3) {
+    opacity: 1;
   }
 }

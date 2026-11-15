@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import AsciiTwinkle from '../components/ascii/AsciiTwinkle.jsx'
 import Placeholder from '../components/ui/Placeholder.jsx'
 import content from '../data/content.js'
@@ -6,18 +7,103 @@ const PHOTO_TEXTURE = Array.from({ length: 9 }, (_, row) =>
   Array.from({ length: 22 }, (_, col) => ((row + col) % 4 === 0 ? '·' : ' ')).join(''),
 ).join('\n')
 
-function Photo({ photo, index }) {
-  const number = String(index + 1).padStart(2, '0')
+// Frames of a tiny ASCII hourglass; CSS steps through them while a photo loads.
+const HOURGLASS = [
+  ' ___\n \\:/\n /.\\\n ‾‾‾',
+  ' ___\n \\ /\n /:\\\n ‾‾‾',
+  ' ___\n \\ /\n / \\\n ‾:‾',
+]
+const SEGMENTS = 8
+// The frame is 4:5. A wider photo is cropped by `object-fit: cover`, so it
+// renders wider than the frame; scale `sizes` so the browser picks a sharp file.
+const FRAME_RATIO = 4 / 5
+
+function photoSizes(photo) {
+  const scale = photo.width && photo.height ? Math.max(1, photo.width / photo.height / FRAME_RATIO) : 1
+  const mobile = Math.ceil(64 * scale)
+  const desktop = Math.ceil(320 * scale)
+  return `(max-width: 640px) ${mobile}vw, ${desktop}px`
+}
+
+function PhotoImage({ photo, eager, filename }) {
+  const [status, setStatus] = useState('loading')
+
+  const handleLoad = (event) => {
+    const img = event.currentTarget
+    const reveal = () => setStatus('loaded')
+    if (img.decode) img.decode().then(reveal, reveal)
+    else reveal()
+  }
+
+  const sizes = photoSizes(photo)
+  const srcSet = photo.sources?.map((source) => `${source.src} ${source.width}w`).join(', ')
 
   return (
-    <figure className="photo" style={{ '--tilt': `${[-1.2, 0.8, -0.4][index % 3]}deg` }}>
-      <div className="photo-frame">
+    <div className="photo-frame" data-status={status}>
+      <picture>
+        {srcSet && <source type="image/webp" srcSet={srcSet} sizes={sizes} />}
+        <img
+          src={photo.src}
+          alt={photo.alt}
+          width={photo.width}
+          height={photo.height}
+          loading={eager ? 'eager' : 'lazy'}
+          decoding="async"
+          onLoad={handleLoad}
+          onError={() => setStatus('error')}
+        />
+      </picture>
+
+      {status === 'loading' && (
+        <div className="photo-loading" role="status">
+          <span className="hourglass" aria-hidden="true">
+            {HOURGLASS.map((frame) => (
+              <span key={frame}>{frame}</span>
+            ))}
+          </span>
+          <span className="photo-loading-label">Loading...</span>
+          <span className="photo-progress" aria-hidden="true">
+            {Array.from({ length: SEGMENTS }, (_, i) => (
+              <span key={i} style={{ '--seg': i }} />
+            ))}
+          </span>
+        </div>
+      )}
+
+      {status === 'error' && (
+        <div className="photo-loading photo-error" role="status">
+          <span aria-hidden="true">[ × ]</span>
+          <span className="photo-loading-label">couldn’t open {filename}</span>
+        </div>
+      )}
+    </div>
+  )
+}
+
+function Photo({ photo, index }) {
+  const number = String(index + 1).padStart(2, '0')
+  const filename = `photo_${number}.jpg`
+
+  return (
+    <figure className="photo">
+      <div className="window">
+        <div className="window-bar" aria-hidden="true">
+          <span className="window-menu">...</span>
+          <span className="window-title">{filename}</span>
+          <span className="window-controls">
+            <span>—</span>
+            <span>□</span>
+          </span>
+        </div>
         {photo.src ? (
-          <img src={photo.src} alt={photo.alt} loading="lazy" decoding="async" />
+          // On narrow screens the gallery scrolls sideways and the third photo starts offscreen.
+          <PhotoImage photo={photo} eager={index < 2} filename={filename} />
         ) : (
-          <div className="photo-empty">
-            <pre aria-hidden="true">{PHOTO_TEXTURE}</pre>
-            <Placeholder>photo {number}</Placeholder>
+          <div className="photo-frame">
+            <div className="photo-empty">
+              <pre aria-hidden="true">{PHOTO_TEXTURE}</pre>
+              <Placeholder>photo {number}</Placeholder>
+            </div>
           </div>
         )}
       </div>

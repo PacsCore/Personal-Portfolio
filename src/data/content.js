@@ -36,10 +36,40 @@ const content = {
       'Most of what I make sits somewhere between code and design.',
     ],
     // EDIT ME: add files under public/images/about/ and set `src` + `alt`.
+    // `src` is the JPEG fallback; `sources` are pre-sized WebP versions
+    // (generated with cwebp). `width`/`height` are the original pixel size.
     photos: [
-      { src: '/images/about/photo1.jpeg', alt: 'Photo 1', caption: 'a little bit about me' },
-      { src: '/images/about/photo2.jpeg', alt: 'Photo 2', caption: 'wired in' },
-      { src: '/images/about/photo3.jpeg', alt: 'Photo 3', caption: 'life outside the screen' },
+      {
+        src: '/images/about/photo1.jpeg',
+        width: 525,
+        height: 943,
+        sources: [{ src: '/images/about/photo1-525.webp', width: 525 }],
+        alt: 'Photo 1',
+        caption: 'a little bit about me',
+      },
+      {
+        src: '/images/about/photo2-1600.jpg',
+        width: 1600,
+        height: 1200,
+        sources: [
+          { src: '/images/about/photo2-800.webp', width: 800 },
+          { src: '/images/about/photo2-1200.webp', width: 1200 },
+          { src: '/images/about/photo2-1600.webp', width: 1600 },
+        ],
+        alt: 'Photo 2',
+        caption: 'wired in',
+      },
+      {
+        src: '/images/about/photo3.jpeg',
+        width: 729,
+        height: 1291,
+        sources: [
+          { src: '/images/about/photo3-640.webp', width: 640 },
+          { src: '/images/about/photo3-729.webp', width: 729 },
+        ],
+        alt: 'Photo 3',
+        caption: 'life outside the screen',
+      },
     ],
     interests: [
       {
